@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -55,6 +57,16 @@ class Vote
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="votes")
      */
     private $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Voice", mappedBy="vote")
+     */
+    private $voices;
+
+    public function __construct()
+    {
+        $this->voices = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -153,6 +165,37 @@ class Vote
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Voice[]
+     */
+    public function getVoices(): Collection
+    {
+        return $this->voices;
+    }
+
+    public function addVoice(Voice $voice): self
+    {
+        if (!$this->voices->contains($voice)) {
+            $this->voices[] = $voice;
+            $voice->setVote($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVoice(Voice $voice): self
+    {
+        if ($this->voices->contains($voice)) {
+            $this->voices->removeElement($voice);
+            // set the owning side to null (unless already changed)
+            if ($voice->getVote() === $this) {
+                $voice->setVote(null);
+            }
+        }
 
         return $this;
     }

@@ -36,6 +36,18 @@ class Voice
      */
     private $updatedAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Vote", inversedBy="voices")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $vote;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Place", inversedBy="voices")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $place;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -85,6 +97,30 @@ class Voice
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getVote(): ?Vote
+    {
+        return $this->vote;
+    }
+
+    public function setVote(?Vote $vote): self
+    {
+        $this->vote = $vote;
+
+        return $this;
+    }
+
+    public function getPlace(): ?Place
+    {
+        return $this->place;
+    }
+
+    public function setPlace(?Place $place): self
+    {
+        $this->place = $place;
 
         return $this;
     }

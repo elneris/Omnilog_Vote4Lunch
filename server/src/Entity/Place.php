@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -80,6 +82,16 @@ class Place
      * @ORM\Column(type="datetime")
      */
     private $updatedAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Voice", mappedBy="place")
+     */
+    private $voices;
+
+    public function __construct()
+    {
+        $this->voices = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -238,6 +250,37 @@ class Place
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Voice[]
+     */
+    public function getVoices(): Collection
+    {
+        return $this->voices;
+    }
+
+    public function addVoice(Voice $voice): self
+    {
+        if (!$this->voices->contains($voice)) {
+            $this->voices[] = $voice;
+            $voice->setPlace($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVoice(Voice $voice): self
+    {
+        if ($this->voices->contains($voice)) {
+            $this->voices->removeElement($voice);
+            // set the owning side to null (unless already changed)
+            if ($voice->getPlace() === $this) {
+                $voice->setPlace(null);
+            }
+        }
 
         return $this;
     }
