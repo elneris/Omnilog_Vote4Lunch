@@ -2,14 +2,30 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\PlaceRepository")
+ * @ApiResource(
+ *     normalizationContext={"groups"="place:read"},
+ *     collectionOperations={
+ *         "get",
+ *     },
+ *     itemOperations={
+ *         "get",
+ *     }
+ * )
+ * @ApiFilter(RangeFilter::class, properties={"lat", "lng"})
+ * @ApiFilter(SearchFilter::class, properties={
+ *    "votes": "exact"
+ *     })
  */
 class Place
 {
@@ -17,61 +33,73 @@ class Place
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"place:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"place:read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("place:read")
      */
     private $lat;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("place:read")
      */
     private $lng;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("place:read")
      */
     private $type;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("place:read")
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("place:read")
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $phone;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("place:read")
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("place:read")
+     */
+    private $phone;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("place:read")
      */
     private $website;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("place:read")
      */
-    private $opening_hours;
+    private $openingHours;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("place:read")
      */
     private $cuisine;
 
@@ -86,12 +114,14 @@ class Place
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Voice", mappedBy="place", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Voice", mappedBy="place")
+     * @Groups("place:read")
      */
     private $voices;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Vote", mappedBy="places")
+     * @Groups("place:read")
      */
     private $votes;
 
@@ -99,6 +129,8 @@ class Place
     {
         $this->voices = new ArrayCollection();
         $this->votes = new ArrayCollection();
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -178,18 +210,6 @@ class Place
         return $this;
     }
 
-    public function getPhone(): ?string
-    {
-        return $this->phone;
-    }
-
-    public function setPhone(?string $phone): self
-    {
-        $this->phone = $phone;
-
-        return $this;
-    }
-
     public function getEmail(): ?string
     {
         return $this->email;
@@ -198,6 +218,18 @@ class Place
     public function setEmail(?string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+  
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
 
         return $this;
     }
@@ -216,12 +248,12 @@ class Place
 
     public function getOpeningHours(): ?string
     {
-        return $this->opening_hours;
+        return $this->openingHours;
     }
 
-    public function setOpeningHours(?string $opening_hours): self
+    public function setOpeningHours(?string $openingHours): self
     {
-        $this->opening_hours = $opening_hours;
+        $this->openingHours = $openingHours;
 
         return $this;
     }

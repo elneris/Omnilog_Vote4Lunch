@@ -2,12 +2,33 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\VoiceRepository")
+ * @ApiResource(
+ *     normalizationContext={"groups"="voice:read"},
+ *     denormalizationContext={"groups"={"voice:write"}},
+ *
+ *     collectionOperations={
+ *         "get",
+ *         "post",
+ *     },
+ *     itemOperations={
+ *         "get",
+ *         "delete",
+ *     }
+ * )
+ * @ApiFilter(SearchFilter::class, properties={
+ *     "vote": "exact",
+ *     "place": "exact",
+ *     "pseudo": "exact",
+ *     })
  */
 class Voice
 {
@@ -20,11 +41,28 @@ class Voice
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"voice:read", "voice:write"})
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min= 4,
+     *     max= 50,
+     *     minMessage="Minimum 4 caracters",
+     *     maxMessage="Maximum 50 caracters"
+     * )
      */
     private $pseudo;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"voice:read", "voice:write"})
+     * @Assert\NotBlank()
+     * @Assert\Email()
+     * @Assert\Length(
+     *     min= 4,
+     *     max= 50,
+     *     minMessage="Minimum 4 caracters",
+     *     maxMessage="Maximum 50 caracters"
+     * )
      */
     private $email;
 
@@ -41,15 +79,25 @@ class Voice
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Vote", inversedBy="voices")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"voice:read", "voice:write"})
+     * @Assert\NotNull()
      */
     private $vote;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Place", inversedBy="voices")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"voice:read", "voice:write"})
+     * @Assert\NotNull()
      */
     private $place;
 
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+    }
+  
     public function getId(): ?int
     {
         return $this->id;
