@@ -2,13 +2,36 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ApiResource(
+ *     normalizationContext={"groups"="user:read"},
+ *     denormalizationContext={"groups"="user:write"},
+ *     collectionOperations={
+ *         "get",
+ *         "post",
+ *     },
+ *     itemOperations={
+ *         "get",
+ *     }
+ * )
+ * @UniqueEntity({"email"})
+ * @UniqueEntity({"pseudo"})
+ * @ApiFilter(SearchFilter::class, properties={
+ *     "pseudo": "exact",
+ *     "email": "exact"
+ *     })
  */
 class User implements UserInterface
 {
@@ -16,11 +39,21 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups("user:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"user:read", "user:write"})
+     * @Assert\NotBlank()
+     * @Assert\Email()
+     * @Assert\Length(
+     *     min= 4,
+     *     max= 50,
+     *     minMessage="Minimum 4 caracters",
+     *     maxMessage="Maximum 50 caracters"
+     * )
      */
     private $email;
 
@@ -32,16 +65,32 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Groups("user:write")
+     * @Assert\Length(
+     *     min= 4,
+     *     max= 50,
+     *     minMessage="Minimum 4 caracters",
+     *     maxMessage="Maximum 50 caracters"
+     * )
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Groups({"user:read", "user:write"})
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min= 4,
+     *     max= 50,
+     *     minMessage="Minimum 4 caracters",
+     *     maxMessage="Maximum 50 caracters"
+     * )
      */
     private $pseudo;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Vote", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="App\Entity\Vote", mappedBy="user", cascade={"persist"})
+     * @Groups({"user:read"})
      */
     private $votes;
 

@@ -2,12 +2,30 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PlaceRepository")
+ * @ApiResource(
+ *     normalizationContext={"groups"="place:read"},
+ *     collectionOperations={
+ *         "get",
+ *     },
+ *     itemOperations={
+ *         "get",
+ *     }
+ * )
+ * @ApiFilter(RangeFilter::class, properties={"lat", "lng"})
+ * @ApiFilter(SearchFilter::class, properties={
+ *    "votes": "exact"
+ *     })
  */
 class Place
 {
@@ -15,61 +33,73 @@ class Place
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"place:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"place:read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("place:read")
      */
     private $lat;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("place:read")
      */
     private $lng;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("place:read")
      */
     private $type;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("place:read")
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("place:read")
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("place:read")
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("place:read")
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("place:read")
      */
     private $website;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("place:read")
      */
     private $openingHours;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("place:read")
      */
     private $cuisine;
 
@@ -85,12 +115,22 @@ class Place
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Voice", mappedBy="place")
+     * @Groups("place:read")
      */
     private $voices;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Vote", mappedBy="places")
+     * @Groups("place:read")
+     */
+    private $votes;
 
     public function __construct()
     {
         $this->voices = new ArrayCollection();
+        $this->votes = new ArrayCollection();
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -280,6 +320,34 @@ class Place
             if ($voice->getPlace() === $this) {
                 $voice->setPlace(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Vote[]
+     */
+    public function getVotes(): Collection
+    {
+        return $this->votes;
+    }
+
+    public function addVote(Vote $vote): self
+    {
+        if (!$this->votes->contains($vote)) {
+            $this->votes[] = $vote;
+            $vote->addPlace($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVote(Vote $vote): self
+    {
+        if ($this->votes->contains($vote)) {
+            $this->votes->removeElement($vote);
+            $vote->removePlace($this);
         }
 
         return $this;
