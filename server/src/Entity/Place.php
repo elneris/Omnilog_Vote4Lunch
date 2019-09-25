@@ -221,7 +221,7 @@ class Place
 
         return $this;
     }
-
+  
     public function getPhone(): ?string
     {
         return $this->phone;

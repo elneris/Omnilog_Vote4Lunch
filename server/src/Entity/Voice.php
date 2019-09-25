@@ -97,7 +97,7 @@ class Voice
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
     }
-
+  
     public function getId(): ?int
     {
         return $this->id;
