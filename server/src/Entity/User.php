@@ -72,6 +72,7 @@ class User implements UserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      * @Groups("user:write")
+     * @Assert\NotBlank()
      * @Assert\Length(
      *     min= 4,
      *     max= 50,

@@ -66,25 +66,30 @@ class Vote
      * @ORM\Column(type="datetime")
      * @Groups({"vote:read", "vote:write", "user:read", "place:read", "voice:read"})
      * @Assert\GreaterThan("now")
+     * @Assert\DateTime()
+     * @Assert\NotBlank()
      */
     private $date;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"vote:read", "vote:write", "user:read", "place:read", "voice:read"})
-     *
+     * @Assert\DateTime()
+     * @Assert\NotBlank()
      */
     private $endDate;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"vote:read", "user:read", "place:read", "voice:read"})
+     * @Assert\NotBlank()
      */
     private $url;
 
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"vote:read", "user:read", "place:read", "voice:read"})
+     * @Assert\NotBlank()
      */
     private $active;
 
@@ -103,6 +108,7 @@ class Vote
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"vote:read", "vote:write"})
      * @ApiSubresource()
+     * @Assert\NotBlank()
      */
     private $user;
 
