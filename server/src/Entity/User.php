@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,6 +17,11 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ApiResource(
+ *     subresourceOperations={
+ *         "api_vote_users_get_subresource"={
+ *             "normalization_context"={"groups"="vote_users_subresource"}
+ *         },
+ *     },
  *     normalizationContext={"groups"="user:read"},
  *     denormalizationContext={"groups"="user:write"},
  *     collectionOperations={
@@ -45,7 +51,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"user:read", "user:write", "vote:read"})
+     * @Groups({"user:read", "user:write", "vote:read", "vote_users_subresource"})
      * @Assert\NotBlank()
      * @Assert\Email()
      * @Assert\Length(
@@ -77,7 +83,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Groups({"user:read", "user:write", "vote:read"})
+     * @Groups({"user:read", "user:write", "vote:read", "vote_users_subresource"})
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min= 4,

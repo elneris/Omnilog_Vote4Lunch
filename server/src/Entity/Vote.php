@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,6 +16,11 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VoteRepository")
  * @ApiResource(
+ *     subresourceOperations={
+ *         "voices_get_subresource"={"path"="/votes/{id}/voices"},
+ *         "places_get_subresource"={"path"="/votes/{id}/places"},
+ *         "users_get_subresource"={"path"="/votes/{id}/users"},
+ *     },
  *     normalizationContext={"groups"="vote:read"},
  *     denormalizationContext={"groups"={"vote:write"}},
  *
@@ -96,18 +102,21 @@ class Vote
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="votes")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"vote:read", "vote:write"})
+     * @ApiSubresource()
      */
     private $user;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Voice", mappedBy="vote")
      * @Groups({"vote:read"})
+     * @ApiSubresource()
      */
     private $voices;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Place", inversedBy="votes")
      * @Groups({"vote:read", "vote:write"})
+     * @ApiSubresource()
      */
     private $places;
 

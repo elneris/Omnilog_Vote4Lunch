@@ -12,6 +12,11 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VoiceRepository")
  * @ApiResource(
+ *     subresourceOperations={
+ *         "api_vote_voices_get_subresource"={
+ *             "normalization_context"={"groups"="vote_voices_subresource"}
+ *         },
+ *     },
  *     normalizationContext={"groups"="voice:read"},
  *     denormalizationContext={"groups"={"voice:write"}},
  *
@@ -41,7 +46,7 @@ class Voice
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"voice:read", "voice:write", "place:read", "vote:read"})
+     * @Groups({"voice:read", "voice:write", "place:read", "vote:read", "vote_voices_subresource"})
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min= 4,
@@ -54,7 +59,7 @@ class Voice
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"voice:read", "voice:write", "place:read", "vote:read"})
+     * @Groups({"voice:read", "voice:write", "place:read", "vote:read", "vote_voices_subresource"})
      * @Assert\NotBlank()
      * @Assert\Email()
      * @Assert\Length(
