@@ -45,7 +45,7 @@ class Vote
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"vote:read", "vote:write"})
+     * @Groups({"vote:read", "vote:write", "user:read", "place:read", "voice:read"})
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min= 4,
@@ -58,27 +58,27 @@ class Vote
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"vote:read", "vote:write"})
+     * @Groups({"vote:read", "vote:write", "user:read", "place:read", "voice:read"})
      * @Assert\GreaterThan("now")
      */
     private $date;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"vote:read", "vote:write"})
+     * @Groups({"vote:read", "vote:write", "user:read", "place:read", "voice:read"})
      *
      */
     private $endDate;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"vote:read"})
+     * @Groups({"vote:read", "user:read", "place:read", "voice:read"})
      */
     private $url;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"vote:read"})
+     * @Groups({"vote:read", "user:read", "place:read", "voice:read"})
      */
     private $active;
 

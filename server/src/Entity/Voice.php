@@ -41,7 +41,7 @@ class Voice
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"voice:read", "voice:write"})
+     * @Groups({"voice:read", "voice:write", "place:read", "vote:read"})
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min= 4,
@@ -54,7 +54,7 @@ class Voice
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"voice:read", "voice:write"})
+     * @Groups({"voice:read", "voice:write", "place:read", "vote:read"})
      * @Assert\NotBlank()
      * @Assert\Email()
      * @Assert\Length(

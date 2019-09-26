@@ -39,67 +39,67 @@ class Place
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"place:read"})
+     * @Groups({"place:read", "vote:read", "voice:read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups("place:read")
+     * @Groups({"place:read", "vote:read", "voice:read"})
      */
     private $lat;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups("place:read")
+     * @Groups({"place:read", "vote:read", "voice:read"})
      */
     private $lng;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("place:read")
+     * @Groups({"place:read", "vote:read", "voice:read"})
      */
     private $type;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("place:read")
+     * @Groups({"place:read", "vote:read", "voice:read"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("place:read")
+     * @Groups({"place:read", "vote:read", "voice:read"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("place:read")
+     * @Groups({"place:read", "vote:read", "voice:read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("place:read")
+     * @Groups({"place:read", "vote:read", "voice:read"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("place:read")
+     * @Groups({"place:read", "vote:read", "voice:read"})
      */
     private $website;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("place:read")
+     * @Groups({"place:read", "vote:read", "voice:read"})
      */
     private $openingHours;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups("place:read")
+     * @Groups({"place:read", "vote:read", "voice:read"})
      */
     private $cuisine;
 

@@ -45,7 +45,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write", "vote:read"})
      * @Assert\NotBlank()
      * @Assert\Email()
      * @Assert\Length(
@@ -77,7 +77,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write", "vote:read"})
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min= 4,
