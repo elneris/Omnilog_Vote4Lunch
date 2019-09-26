@@ -128,6 +128,28 @@ class Vote
         $this->setUrl($url);
     }
 
+    /**
+     * Get total voices per vote
+     * @Groups({"vote:read"})
+     * @return array
+     */
+    public function getTotalVoiceForEachPlace(): array
+    {
+        $places = $this->places;
+        $voices = $this->voices;
+        $totalVotes = [];
+        foreach ($places as $place) {
+            $total = 0;
+            foreach ( $voices as $voice) {
+                if ($voice->getVote()->getId() === $this->getId() && $voice->getPlace()->getId() === $place->getId()) {
+                    $total++;
+                }
+            }
+            $totalVotes[$place->getId()] = $total;
+        }
+        return $totalVotes;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
