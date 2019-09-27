@@ -22,7 +22,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *         "users_get_subresource"={"path"="/votes/{id}/users"},
  *     },
  *     normalizationContext={"groups"="vote:read"},
- *     denormalizationContext={"groups"={"vote:write"}},
+ *     denormalizationContext={"groups"={"vote:write"}, "disable_type_enforcement"=true},
  *
  *     collectionOperations={
  *         "get",
@@ -52,7 +52,7 @@ class Vote
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"vote:read", "vote:write", "user:read", "place:read", "voice:read"})
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="Champ obligatoire")
      * @Assert\Length(
      *     min= 4,
      *     max= 50,
@@ -66,7 +66,7 @@ class Vote
      * @ORM\Column(type="datetime")
      * @Groups({"vote:read", "vote:write", "user:read", "place:read", "voice:read"})
      * @Assert\GreaterThan("now")
-     * @Assert\DateTime()
+     * @Assert\DateTime(message="ce champs n'est pas une date")
      * @Assert\NotBlank()
      */
     private $date;
@@ -74,7 +74,7 @@ class Vote
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"vote:read", "vote:write", "user:read", "place:read", "voice:read"})
-     * @Assert\DateTime()
+     * @Assert\DateTime(message="ce champs n'est pas une date")
      * @Assert\NotBlank()
      */
     private $endDate;
@@ -187,7 +187,7 @@ class Vote
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setDate($date): self
     {
         $this->date = $date;
 
@@ -199,9 +199,13 @@ class Vote
         return $this->endDate;
     }
 
-    public function setEndDate(\DateTimeInterface $endDate): self
+    public function setEndDate($endDate): self
     {
-        $this->endDate = $endDate;
+        if ($endDate > $this->date) {
+            $this->endDate = $this->date;
+        } else {
+            $this->endDate = $endDate;
+        }
 
         return $this;
     }
