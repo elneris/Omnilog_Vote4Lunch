@@ -31,6 +31,8 @@ Etapes Mise en place de l'Api :
   - rentrer 2 fois votre clé de pass configurer dans le .env
   - openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
   - rentrer votre clé de pass encore une fois
+  - rendez vous dans le dossier jwt ( cd config/jwt ) et regarder les droit de lecture sur fichier private.pem
+  - si les droits de lecture ne sont pas autorisé pour les groups & autre : chmod 644 private.pem
 
 ## MAJ A VENIR 
 
