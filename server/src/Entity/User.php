@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,8 +31,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *         "get",
  *     }
  * )
- * @UniqueEntity({"email"})
- * @UniqueEntity({"pseudo"})
+ * @UniqueEntity("email", message="Cet email est déjà utilisé par un autre utilisateur")
+ * @UniqueEntity("pseudo", message="Ce pseudo est déjà utilisé par un autre utilisateur")
  * @ApiFilter(SearchFilter::class, properties={
  *     "pseudo": "exact",
  *     "email": "exact"
@@ -52,8 +51,8 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups({"user:read", "user:write", "vote:read", "vote_users_subresource"})
-     * @Assert\NotBlank()
-     * @Assert\Email()
+     * @Assert\NotBlank(message="ce champs est obligatoire")
+     * @Assert\Email(message="Cet email n'est pas valide")
      * @Assert\Length(
      *     min= 4,
      *     max= 50,
@@ -72,7 +71,7 @@ class User implements UserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      * @Groups("user:write")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="ce champs est obligatoire")
      * @Assert\Length(
      *     min= 4,
      *     max= 50,
@@ -85,7 +84,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @Groups({"user:read", "user:write", "vote:read", "vote_users_subresource"})
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="ce champs est obligatoire")
      * @Assert\Length(
      *     min= 4,
      *     max= 50,

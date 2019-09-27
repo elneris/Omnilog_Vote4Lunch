@@ -47,7 +47,7 @@ class Voice
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"voice:read", "voice:write", "place:read", "vote:read", "vote_voices_subresource"})
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="ce champs est obligatoire")
      * @Assert\Length(
      *     min= 4,
      *     max= 50,
@@ -60,8 +60,8 @@ class Voice
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"voice:read", "voice:write", "place:read", "vote:read", "vote_voices_subresource"})
-     * @Assert\NotBlank()
-     * @Assert\Email()
+     * @Assert\NotBlank(message="ce champs est obligatoire")
+     * @Assert\Email(message="Cet email n'est pas valide")
      * @Assert\Length(
      *     min= 4,
      *     max= 50,
@@ -85,7 +85,7 @@ class Voice
      * @ORM\ManyToOne(targetEntity="App\Entity\Vote", inversedBy="voices")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"voice:read", "voice:write"})
-     * @Assert\NotNull()
+     * @Assert\NotBlank()
      */
     private $vote;
 
@@ -93,7 +93,7 @@ class Voice
      * @ORM\ManyToOne(targetEntity="App\Entity\Place", inversedBy="voices")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"voice:read", "voice:write"})
-     * @Assert\NotNull()
+     * @Assert\NotNull(message="ce champs est obligatoire")
      */
     private $place;
 

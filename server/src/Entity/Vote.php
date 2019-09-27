@@ -52,7 +52,7 @@ class Vote
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"vote:read", "vote:write", "user:read", "place:read", "voice:read"})
-     * @Assert\NotBlank(message="Champ obligatoire")
+     * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @Assert\Length(
      *     min= 4,
      *     max= 50,
@@ -67,7 +67,7 @@ class Vote
      * @Groups({"vote:read", "vote:write", "user:read", "place:read", "voice:read"})
      * @Assert\GreaterThan("now")
      * @Assert\DateTime(message="ce champs n'est pas une date")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="ce champs est obligatoire")
      */
     private $date;
 
@@ -75,21 +75,21 @@ class Vote
      * @ORM\Column(type="datetime")
      * @Groups({"vote:read", "vote:write", "user:read", "place:read", "voice:read"})
      * @Assert\DateTime(message="ce champs n'est pas une date")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="ce champs est obligatoire")
      */
     private $endDate;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"vote:read", "user:read", "place:read", "voice:read"})
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="ce champs est obligatoire")
      */
     private $url;
 
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"vote:read", "user:read", "place:read", "voice:read"})
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="ce champs est obligatoire")
      */
     private $active;
 
@@ -108,7 +108,7 @@ class Vote
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"vote:read", "vote:write"})
      * @ApiSubresource()
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="ce champs est obligatoire")
      */
     private $user;
 
