@@ -33,7 +33,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *    "votes": "exact"
  *     })
  */
-class Place
+class Place implements \JsonSerializable
 {
     /**
      * @ORM\Id()
@@ -227,7 +227,7 @@ class Place
 
         return $this;
     }
-  
+
     public function getPhone(): ?string
     {
         return $this->phone;
@@ -357,5 +357,32 @@ class Place
         }
 
         return $this;
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'lat' => $this->getLat(),
+            'lng' => $this->getLng(),
+            'type' => $this->getType(),
+            'address' => $this->getAddress(),
+            'city' => $this->getCity(),
+            'phone' => $this->getPhone(),
+            'email' => $this->getEmail(),
+            'website' => $this->getWebsite(),
+            'opening_hours' => $this->getOpeningHours(),
+            'cuisine' => $this->getCuisine(),
+            'createdAt' => $this->getCreatedAt(),
+            'updatedAt' => $this->getUpdatedAt(),
+        ];
     }
 }

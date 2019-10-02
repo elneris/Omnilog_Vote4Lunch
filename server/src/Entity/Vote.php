@@ -40,7 +40,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *     "url": "exact"
  *     })
  */
-class Vote
+class Vote implements \JsonSerializable
 {
     /**
      * @ORM\Id()
@@ -132,7 +132,7 @@ class Vote
         $this->places = new ArrayCollection();
         $this->updatedAt = new \DateTime();
         $this->createdAt = new \DateTime();
-        $this->setActive(1);
+        $this->setActive(0);
         $url = '';
         $value = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
                   'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
@@ -325,5 +325,31 @@ class Vote
         }
 
         return $this;
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'userId' => $this->getUser()->getId(),
+            'title' => $this->getTitle(),
+            'date' => $this->getDate(),
+            'end_date' => $this->getEndDate(),
+            'url' => $this->getUrl(),
+            'updatedAt' => $this->getUpdatedAt(),
+            'createdAt' => $this->getCreatedAt(),
+            'active' => $this->getActive(),
+            'user' => [
+                'pseudo' => $this->getUser()->getPseudo(),
+                'email' => $this->getUser()->getEmail(),
+                ],
+        ];
     }
 }
