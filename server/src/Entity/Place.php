@@ -383,6 +383,7 @@ class Place implements \JsonSerializable
             'cuisine' => $this->getCuisine(),
             'createdAt' => $this->getCreatedAt(),
             'updatedAt' => $this->getUpdatedAt(),
+            'votes' => $this->getVotes(),
         ];
     }
 }

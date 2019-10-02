@@ -74,7 +74,7 @@ class UserController extends AbstractController
             return new JsonResponse(['created' => true]);
         }
 
-        throw new BadRequestHttpException('Errors duraing add user','', 400);
+        throw new BadRequestHttpException('Errors duraing add user',null, 400);
     }
 
     /**
@@ -106,7 +106,7 @@ class UserController extends AbstractController
             return new JsonResponse(['exist' => true]);
         }
 
-        throw new BadRequestHttpException('Errors during check if user exist','', 400);
+        throw new BadRequestHttpException('Errors during check if user exist',null, 400);
     }
 
     /**
@@ -134,6 +134,6 @@ class UserController extends AbstractController
             return new JsonResponse(['login' => false]);
         }
 
-        throw new BadRequestHttpException('Errors during the login process','', 400);
+        throw new BadRequestHttpException('Errors during the login process',null, 400);
     }
 }

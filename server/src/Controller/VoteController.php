@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 
+use App\Entity\Place;
 use App\Entity\Vote;
 use App\Repository\PlaceRepository;
 use App\Repository\UserRepository;
@@ -91,7 +92,7 @@ class VoteController extends AbstractController
             return new Response($jsonVote);
         }
 
-        throw new BadRequestHttpException('Error when add a new vote','', 400);
+        throw new BadRequestHttpException('Error when add a new vote',null, 400);
     }
 
     /**
@@ -103,7 +104,9 @@ class VoteController extends AbstractController
      */
     public function del(Request $request): JsonResponse
     {
-        $vote = $this->voteRepository->findOneBy(['url' => $request->getContent()['vote_url']]);
+        $data = json_decode($request->getContent(), true);
+
+        $vote = $this->voteRepository->findOneBy(['url' => $data['vote_url']]);
         $this->manager->remove($vote);
         $this->manager->flush();
 
@@ -115,9 +118,9 @@ class VoteController extends AbstractController
      *
      * @Route("/getVote", name="vote_getVote", methods={"get"})
      * @param Request $request
-     * @return object|void
+     * @return Response
      */
-    public function getVote(Request $request)
+    public function getVote(Request $request): Response
     {
         $data = $request->query->all();
 
@@ -125,7 +128,7 @@ class VoteController extends AbstractController
 
         $jsonVote = json_encode($vote);
 
-        dd($jsonVote);
+        return new Response($jsonVote);
     }
 
     /**
@@ -151,31 +154,103 @@ class VoteController extends AbstractController
      *
      * @Route("/add/place", name="vote_add_place", methods={"post"})
      * @param Request $request
-     * @return JsonResponse
+     * @return Response
      */
-    public function addPlace(Request $request): JsonResponse
+    public function addPlace(Request $request): Response
     {
-        $data = $request->getContent();
+        $data = json_decode($request->getContent(), true);
 
         $vote = $this->voteRepository->findOneBy(['id' => $data['vote_id']]);
 
         if ($vote) {
             $vote->setActive(1);
 
+            $this->manager->flush();
+
             $place = $this->placeRepository->findOneBy(['id' => $data['place_id']]);
 
             if ($place) {
                 $vote->addPlace($place);
 
-                $jsonplace = json_encode($place);
+                $this->manager->flush();
+                $returnResponse = json_encode(['added' => true, 'place' => $place]);
 
-                return new JsonResponse(['added' => true, 'place' => $jsonplace]);
+                return new Response($returnResponse);
             }
 
-            throw new BadRequestHttpException('Errors no place found','', 400);
+            throw new BadRequestHttpException('Errors no place found', null, 400);
 
         }
 
-        throw new BadRequestHttpException('Errors no vote found','', 400);
+        throw new BadRequestHttpException('Errors no vote found',null, 400);
+    }
+
+    /**
+     * Desactivate vote instance if no places is associated
+     *
+     * @param Vote $vote
+     */
+    public function makeThings(Vote $vote): void
+    {
+        if ($vote->getPlaces()->toArray() === []) {
+            $vote->setActive(0);
+
+            $this->manager->flush();
+        }
+    }
+
+    /**
+     * Delete a place from a vote and return it
+     *
+     * @Route("/del/place", name="vote_del_place", methods={"post"})
+     * @param Request $request
+     * @return Response
+     */
+    public function delPlace(Request $request): Response
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $vote = $this->voteRepository->findOneBy(['id' => $data['vote_id']]);
+
+        if ($vote) {
+            $place = $this->placeRepository->findOneBy(['id' => $data['place_id']]);
+
+            if ($place) {
+                $vote->removePlace($place);
+                $this->manager->flush();
+
+                $this->makeThings($vote);
+
+                $returnResponse = json_encode(['deleted' => true, 'place' => $place]);
+
+                return new Response($returnResponse);
+            }
+
+            throw new BadRequestHttpException('Errors no place found',null, 400);
+        }
+
+        throw new BadRequestHttpException('Errors no vote found',null, 400);
+    }
+
+    /**
+     * Get the list of places for a vote
+     *
+     * @Route("/get/places/list", name="vote_get_places_list", methods={"post"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getPlacesList(Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $vote = $this->voteRepository->findOneBy(['url' => $data['vote_url']]);
+
+        if ($vote) {
+            $returnResponse = $vote->getPlaces()->toArray();
+
+            return new JsonResponse($returnResponse);
+        }
+
+        throw new BadRequestHttpException('Errors no vote found',null, 400);
     }
 }
