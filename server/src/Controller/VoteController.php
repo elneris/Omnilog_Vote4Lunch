@@ -10,6 +10,7 @@ use App\Repository\PlaceRepository;
 use App\Repository\UserRepository;
 use App\Repository\VoteRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,7 +66,7 @@ class VoteController extends AbstractController
      * @Route("/add", name="vote_add", methods={"post"})
      * @param Request $request
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function add(Request $request): Response
     {

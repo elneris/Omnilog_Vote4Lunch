@@ -2,36 +2,20 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PlaceRepository")
  * @ApiResource(
- *     subresourceOperations={
- *         "api_vote_places_get_subresource"={
- *             "normalization_context"={"groups"="vote_places_subresource"}
- *         },
- *     },
- *     normalizationContext={"groups"="place:read"},
  *     collectionOperations={
- *         "get",
+ *         "list_place"={"name"="list_place"},
  *     },
  *     itemOperations={
- *         "get",
  *     }
  * )
- * @ApiFilter(RangeFilter::class, properties={"lat", "lng"})
- * @ApiFilter(SearchFilter::class, properties={
- *    "votes": "exact"
- *     })
  */
 class Place implements \JsonSerializable
 {
@@ -39,73 +23,61 @@ class Place implements \JsonSerializable
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"place:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"place:read", "vote:read", "voice:read", "vote_places_subresource"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"place:read", "vote:read", "voice:read", "vote_places_subresource"})
      */
     private $lat;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"place:read", "vote:read", "voice:read", "vote_places_subresource"})
      */
     private $lng;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"place:read", "vote:read", "voice:read", "vote_places_subresource"})
      */
     private $type;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"place:read", "vote:read", "voice:read", "vote_places_subresource"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"place:read", "vote:read", "voice:read", "vote_places_subresource"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"place:read", "vote:read", "voice:read", "vote_places_subresource"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"place:read", "vote:read", "voice:read", "vote_places_subresource"})
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"place:read", "vote:read", "voice:read", "vote_places_subresource"})
      */
     private $website;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"place:read", "vote:read", "voice:read", "vote_places_subresource"})
      */
     private $openingHours;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"place:read", "vote:read", "voice:read", "vote_places_subresource"})
      */
     private $cuisine;
 
@@ -121,13 +93,11 @@ class Place implements \JsonSerializable
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Voice", mappedBy="place")
-     * @Groups("place:read")
      */
     private $voices;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Vote", mappedBy="places")
-     * @Groups("place:read")
      */
     private $votes;
 

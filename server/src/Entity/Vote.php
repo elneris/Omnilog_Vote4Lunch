@@ -2,43 +2,28 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VoteRepository")
  * @ApiResource(
- *     subresourceOperations={
- *         "voices_get_subresource"={"path"="/votes/{id}/voices"},
- *         "places_get_subresource"={"path"="/votes/{id}/places"},
- *         "users_get_subresource"={"path"="/votes/{id}/users"},
- *     },
- *     normalizationContext={"groups"="vote:read"},
- *     denormalizationContext={"groups"={"vote:write"}, "disable_type_enforcement"=true},
- *
  *     collectionOperations={
- *         "get",
- *         "post",
+ *         "vote_add"={"name"="vote_add"},
+ *         "vote_del"={"name"="vote_del"},
+ *         "vote_getVote"={"name"="vote_getVote"},
+ *         "vote_get_mine"={"name"="vote_get_mine"},
+ *         "vote_add_place"={"name"="vote_add_place"},
+ *         "vote_del_place"={"name"="vote_del_place"},
+ *         "vote_get_places_list"={"name"="vote_get_places_list"},
  *     },
  *     itemOperations={
- *         "get",
- *         "delete",
- *         "put",
  *     }
  * )
- * @ApiFilter(BooleanFilter::class, properties={"active"})
- * @ApiFilter(SearchFilter::class, properties={
- *     "user": "exact",
- *     "url": "exact"
- *     })
  */
 class Vote implements \JsonSerializable
 {
@@ -51,7 +36,6 @@ class Vote implements \JsonSerializable
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"vote:read", "vote:write", "user:read", "place:read", "voice:read"})
      * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @Assert\Length(
      *     min= 4,
@@ -64,7 +48,6 @@ class Vote implements \JsonSerializable
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"vote:read", "vote:write", "user:read", "place:read", "voice:read"})
      * @Assert\GreaterThan("now")
      * @Assert\DateTime(message="ce champs n'est pas une date")
      * @Assert\NotBlank(message="ce champs est obligatoire")
@@ -73,7 +56,6 @@ class Vote implements \JsonSerializable
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"vote:read", "vote:write", "user:read", "place:read", "voice:read"})
      * @Assert\DateTime(message="ce champs n'est pas une date")
      * @Assert\NotBlank(message="ce champs est obligatoire")
      */
@@ -81,14 +63,12 @@ class Vote implements \JsonSerializable
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"vote:read", "user:read", "place:read", "voice:read"})
      * @Assert\NotBlank(message="ce champs est obligatoire")
      */
     private $url;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"vote:read", "user:read", "place:read", "voice:read"})
      * @Assert\NotBlank(message="ce champs est obligatoire")
      */
     private $active;
@@ -106,23 +86,17 @@ class Vote implements \JsonSerializable
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="votes")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"vote:read", "vote:write"})
-     * @ApiSubresource()
      * @Assert\NotBlank(message="ce champs est obligatoire")
      */
     private $user;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Voice", mappedBy="vote")
-     * @Groups({"vote:read"})
-     * @ApiSubresource()
      */
     private $voices;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Place", inversedBy="votes")
-     * @Groups({"vote:read", "vote:write"})
-     * @ApiSubresource()
      */
     private $places;
 
@@ -145,7 +119,6 @@ class Vote implements \JsonSerializable
 
     /**
      * Get total voices per vote
-     * @Groups({"vote:read"})
      * @return array
      */
     public function getTotalVoiceForEachPlace(): array
