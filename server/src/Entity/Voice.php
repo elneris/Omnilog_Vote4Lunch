@@ -2,38 +2,22 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VoiceRepository")
  * @ApiResource(
- *     subresourceOperations={
- *         "api_vote_voices_get_subresource"={
- *             "normalization_context"={"groups"="vote_voices_subresource"}
- *         },
- *     },
- *     normalizationContext={"groups"="voice:read"},
- *     denormalizationContext={"groups"={"voice:write"}},
- *
  *     collectionOperations={
- *         "get",
- *         "post",
+ *         "voice_add"={"name"="voice_add"},
+ *         "voice_delete"={"name"="voice_delete"},
+ *         "voice_count_all"={"name"="voice_count_all"},
+ *         "voice_get_all_foruser"={"name"="voice_get_all_foruser"},
+ *         "voice_get_all_forvote"={"name"="voice_get_all_forvote"},
  *     },
- *     itemOperations={
- *         "get",
- *         "delete",
- *     }
+ *     itemOperations={}
  * )
- * @ApiFilter(SearchFilter::class, properties={
- *     "vote": "exact",
- *     "place": "exact",
- *     "pseudo": "exact",
- *     })
  */
 class Voice
 {
@@ -46,7 +30,6 @@ class Voice
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"voice:read", "voice:write", "place:read", "vote:read", "vote_voices_subresource"})
      * @Assert\NotBlank(message="ce champs est obligatoire")
      * @Assert\Length(
      *     min= 4,
@@ -59,7 +42,6 @@ class Voice
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"voice:read", "voice:write", "place:read", "vote:read", "vote_voices_subresource"})
      * @Assert\NotBlank(message="ce champs est obligatoire")
      * @Assert\Email(message="Cet email n'est pas valide")
      * @Assert\Length(
@@ -84,7 +66,6 @@ class Voice
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Vote", inversedBy="voices")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"voice:read", "voice:write"})
      * @Assert\NotBlank()
      */
     private $vote;
@@ -92,7 +73,6 @@ class Voice
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Place", inversedBy="voices")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"voice:read", "voice:write"})
      * @Assert\NotNull(message="ce champs est obligatoire")
      */
     private $place;
@@ -102,7 +82,7 @@ class Voice
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
     }
-  
+
     public function getId(): ?int
     {
         return $this->id;
