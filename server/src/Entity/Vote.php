@@ -2,45 +2,30 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VoteRepository")
  * @ApiResource(
- *     subresourceOperations={
- *         "voices_get_subresource"={"path"="/votes/{id}/voices"},
- *         "places_get_subresource"={"path"="/votes/{id}/places"},
- *         "users_get_subresource"={"path"="/votes/{id}/users"},
- *     },
- *     normalizationContext={"groups"="vote:read"},
- *     denormalizationContext={"groups"={"vote:write"}, "disable_type_enforcement"=true},
- *
  *     collectionOperations={
- *         "get",
- *         "post",
+ *         "vote_add"={"name"="vote_add"},
+ *         "vote_del"={"name"="vote_del"},
+ *         "vote_getVote"={"name"="vote_getVote"},
+ *         "vote_get_mine"={"name"="vote_get_mine"},
+ *         "vote_add_place"={"name"="vote_add_place"},
+ *         "vote_del_place"={"name"="vote_del_place"},
+ *         "vote_get_places_list"={"name"="vote_get_places_list"},
  *     },
  *     itemOperations={
- *         "get",
- *         "delete",
- *         "put",
  *     }
  * )
- * @ApiFilter(BooleanFilter::class, properties={"active"})
- * @ApiFilter(SearchFilter::class, properties={
- *     "user": "exact",
- *     "url": "exact"
- *     })
  */
-class Vote
+class Vote implements \JsonSerializable
 {
     /**
      * @ORM\Id()
@@ -51,7 +36,6 @@ class Vote
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"vote:read", "vote:write", "user:read", "place:read", "voice:read"})
      * @Assert\NotBlank(message="Ce champ est obligatoire")
      * @Assert\Length(
      *     min= 4,
@@ -64,7 +48,6 @@ class Vote
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"vote:read", "vote:write", "user:read", "place:read", "voice:read"})
      * @Assert\GreaterThan("now")
      * @Assert\DateTime(message="ce champs n'est pas une date")
      * @Assert\NotBlank(message="ce champs est obligatoire")
@@ -73,7 +56,6 @@ class Vote
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"vote:read", "vote:write", "user:read", "place:read", "voice:read"})
      * @Assert\DateTime(message="ce champs n'est pas une date")
      * @Assert\NotBlank(message="ce champs est obligatoire")
      */
@@ -81,14 +63,12 @@ class Vote
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"vote:read", "user:read", "place:read", "voice:read"})
      * @Assert\NotBlank(message="ce champs est obligatoire")
      */
     private $url;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"vote:read", "user:read", "place:read", "voice:read"})
      * @Assert\NotBlank(message="ce champs est obligatoire")
      */
     private $active;
@@ -106,23 +86,17 @@ class Vote
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="votes")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"vote:read", "vote:write"})
-     * @ApiSubresource()
      * @Assert\NotBlank(message="ce champs est obligatoire")
      */
     private $user;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Voice", mappedBy="vote")
-     * @Groups({"vote:read"})
-     * @ApiSubresource()
      */
     private $voices;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Place", inversedBy="votes")
-     * @Groups({"vote:read", "vote:write"})
-     * @ApiSubresource()
      */
     private $places;
 
@@ -132,7 +106,7 @@ class Vote
         $this->places = new ArrayCollection();
         $this->updatedAt = new \DateTime();
         $this->createdAt = new \DateTime();
-        $this->setActive(1);
+        $this->setActive(0);
         $url = '';
         $value = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
                   'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
@@ -145,7 +119,6 @@ class Vote
 
     /**
      * Get total voices per vote
-     * @Groups({"vote:read"})
      * @return array
      */
     public function getTotalVoiceForEachPlace(): array
@@ -325,5 +298,31 @@ class Vote
         }
 
         return $this;
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'userId' => $this->getUser()->getId(),
+            'title' => $this->getTitle(),
+            'date' => $this->getDate(),
+            'end_date' => $this->getEndDate(),
+            'url' => $this->getUrl(),
+            'updatedAt' => $this->getUpdatedAt(),
+            'createdAt' => $this->getCreatedAt(),
+            'active' => $this->getActive(),
+            'user' => [
+                'pseudo' => $this->getUser()->getPseudo(),
+                'email' => $this->getUser()->getEmail(),
+                ],
+        ];
     }
 }

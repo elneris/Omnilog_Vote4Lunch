@@ -2,42 +2,27 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use mysql_xdevapi\Exception;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ApiResource(
- *     subresourceOperations={
- *         "api_vote_users_get_subresource"={
- *             "normalization_context"={"groups"="vote_users_subresource"}
- *         },
- *     },
- *     normalizationContext={"groups"="user:read"},
- *     denormalizationContext={"groups"="user:write"},
  *     collectionOperations={
- *         "get",
- *         "post",
+ *         "user_add"={"name"="user_add"},
+ *         "user_exists"={"name"="user_exists"},
+ *         "user_login"={"name"="user_login"},
  *     },
  *     itemOperations={
- *         "get",
  *     }
  * )
  * @UniqueEntity("email", message="Cet email est déjà utilisé par un autre utilisateur")
  * @UniqueEntity("pseudo", message="Ce pseudo est déjà utilisé par un autre utilisateur")
- * @ApiFilter(SearchFilter::class, properties={
- *     "pseudo": "exact",
- *     "email": "exact"
- *     })
  */
 class User implements UserInterface
 {
@@ -45,13 +30,11 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups("user:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"user:read", "user:write", "vote:read", "vote_users_subresource"})
      * @Assert\NotBlank(message="ce champs est obligatoire")
      * @Assert\Email(message="Cet email n'est pas valide")
      * @Assert\Length(
@@ -71,7 +54,6 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Groups("user:write")
      * @Assert\NotBlank(message="ce champs est obligatoire")
      * @Assert\Length(
      *     min= 4,
@@ -84,7 +66,6 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Groups({"user:read", "user:write", "vote:read", "vote_users_subresource"})
      * @Assert\NotBlank(message="ce champs est obligatoire")
      * @Assert\Length(
      *     min= 4,
@@ -97,7 +78,6 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Vote", mappedBy="user", cascade={"persist"})
-     * @Groups({"user:read"})
      */
     private $votes;
 
