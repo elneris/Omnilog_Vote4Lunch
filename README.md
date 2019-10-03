@@ -7,6 +7,10 @@ L’objectif est de faire la refonte du site côté back afin de migrer sur le f
 
 Ceci est la parti back de l'appli.
 
+Back : API Platform
+Front : React ( appli sur un autre repo )
+Back Office : SonataAdmin
+
 ## Installation du projet
 
 Prérequis :
@@ -33,10 +37,6 @@ Etapes Mise en place de l'Api :
   - rentrer votre clé de pass encore une fois
   - rendez vous dans le dossier jwt ( cd config/jwt ) et regarder les droit de lecture sur fichier private.pem
   - si les droits de lecture ne sont pas autorisé pour les groups & autre : chmod 644 private.pem
-
-## MAJ A VENIR 
-
-- 28/09 : Il manque un fichier de migration, vous pouvez faire un make:migration avant le doctrine:migration:migrate
 
 ## Développer par Elnéris Dang pour Omnilog SAS
 
