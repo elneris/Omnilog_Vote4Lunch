@@ -6,6 +6,7 @@ use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -50,7 +51,7 @@ class PasswordEncoderSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function encodePassword(GetResponseForControllerResultEvent $event): void
+    public function encodePassword(ViewEvent $event): void
     {
         $user = $event->getControllerResult();
 

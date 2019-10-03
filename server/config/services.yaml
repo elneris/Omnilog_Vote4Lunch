@@ -36,3 +36,31 @@ services:
                 event: lexik_jwt_authentication.on_jwt_created,
                 method: updateJwtData,
               }
+
+    admin.vote:
+        class: App\Admin\VoteAdmin
+        arguments: [~, App\Entity\Vote, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Sondages, label: Liste des Sondages }
+        public: true
+
+    admin.user:
+        class: App\Admin\UserAdmin
+        arguments: [~, App\Entity\User, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Utilisateurs, label: Liste des Utilisateurs }
+        public: true
+
+    admin.place:
+        class: App\Admin\PlaceAdmin
+        arguments: [~, App\Entity\Place, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Restaurants, label: Liste des Restaurants }
+        public: true
+
+    admin.voice:
+        class: App\Admin\VoiceAdmin
+        arguments: [~, App\Entity\Voice, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Votes, label: Liste des Votes }
+        public: true

@@ -83,6 +83,11 @@ class Voice
         $this->updatedAt = new \DateTime();
     }
 
+    public function __toString()
+    {
+        return ('Vote n°' . $this->getId() . ' : ' . $this->getEmail() . '(' . $this->getPseudo() . ')');
+    }
+
     public function getId(): ?int
     {
         return $this->id;
