@@ -91,6 +91,8 @@ class Place implements \JsonSerializable
      */
     private $updatedAt;
 
+    public $ref;
+
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Voice", mappedBy="place")
      */
@@ -107,6 +109,16 @@ class Place implements \JsonSerializable
         $this->votes = new ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
+    }
+
+    public function __toString()
+    {
+        return ($this->getName() . ' ( id : ' . $this->getId() . ' )');
+    }
+
+    public function getRef()
+    {
+        return ($this->getName() . ' ( id : ' . $this->getId() . ' )');
     }
 
     public function getId(): ?int

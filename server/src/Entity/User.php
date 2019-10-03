@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -33,6 +34,8 @@ class User implements UserInterface
      */
     private $id;
 
+    private $plainPassword;
+
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank(message="ce champs est obligatoire")
@@ -50,6 +53,8 @@ class User implements UserInterface
      * @ORM\Column(type="json")
      */
     private $roles = [];
+
+    private $isAdmin;
 
     /**
      * @var string The hashed password
@@ -84,6 +89,25 @@ class User implements UserInterface
     public function __construct()
     {
         $this->votes = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->email;
+    }
+
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    public function getIsAdmin(): ?bool
+    {
+        if (in_array('ROLE_ADMIN', $this->getRoles(), true)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function getId(): ?int
