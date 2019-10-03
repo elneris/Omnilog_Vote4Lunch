@@ -128,7 +128,7 @@ class UserController extends AbstractController
             $validPassword = $this->encoder->isPasswordValid($user, $data['password']);
 
             if ($validPassword) {
-                return new JsonResponse(['login' => true, 'pseudo' => $data['pseudo'], 'email' => $data['password']]);
+                return new JsonResponse(['login' => true, 'pseudo' => $data['pseudo'], 'email' => $user->getEmail()]);
             }
 
             return new JsonResponse(['login' => false]);

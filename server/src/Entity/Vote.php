@@ -56,6 +56,7 @@ class Vote implements \JsonSerializable
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\GreaterThan("now")
      * @Assert\DateTime(message="ce champs n'est pas une date")
      * @Assert\NotBlank(message="ce champs est obligatoire")
      */
@@ -63,13 +64,11 @@ class Vote implements \JsonSerializable
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="ce champs est obligatoire")
      */
     private $url;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Assert\NotBlank(message="ce champs est obligatoire")
      */
     private $active;
 
@@ -91,7 +90,7 @@ class Vote implements \JsonSerializable
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Voice", mappedBy="vote")
+     * @ORM\OneToMany(targetEntity="App\Entity\Voice", mappedBy="vote", cascade={"remove"})
      */
     private $voices;
 
@@ -108,13 +107,18 @@ class Vote implements \JsonSerializable
         $this->createdAt = new \DateTime();
         $this->setActive(0);
         $url = '';
-        $value = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
-                  'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
-                   0,1,2,3,4,5,6,7,8,9];
-        for ($i = 0; $i < 5; $i ++ ) {
-        $url .= $value[array_rand($value)];
-    }
+        $value = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+        for ($i = 0; $i < 5; $i++) {
+            $url .= $value[array_rand($value)];
+        }
         $this->setUrl($url);
+    }
+
+    public function __toString()
+    {
+        return $this->title;
     }
 
     /**
@@ -128,7 +132,7 @@ class Vote implements \JsonSerializable
         $totalVotes = [];
         foreach ($places as $place) {
             $total = 0;
-            foreach ( $voices as $voice) {
+            foreach ($voices as $voice) {
                 if ($voice->getVote()->getId() === $this->getId() && $voice->getPlace()->getId() === $place->getId()) {
                     $total++;
                 }
@@ -322,7 +326,7 @@ class Vote implements \JsonSerializable
             'user' => [
                 'pseudo' => $this->getUser()->getPseudo(),
                 'email' => $this->getUser()->getEmail(),
-                ],
+            ],
         ];
     }
 }
