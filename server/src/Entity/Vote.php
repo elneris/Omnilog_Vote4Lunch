@@ -91,7 +91,7 @@ class Vote implements \JsonSerializable
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Voice", mappedBy="vote")
+     * @ORM\OneToMany(targetEntity="App\Entity\Voice", mappedBy="vote", cascade={"remove"})
      */
     private $voices;
 
