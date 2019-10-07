@@ -6,6 +6,7 @@ L’application initital a été développé en react côté front et en node.js
 L’objectif est de faire la refonte du site côté back afin de migrer sur le framework symfony propulsé via api platform dans un premier temps sans ajout de nouvelles fonctionnalités. 
 
 Ceci est la parti back de l'appli.
+La parti Front est également disponible sur mon github : https://github.com/elneris/Omnilog_Vote4Lunch_Front
 
 Back : API Platform
 Front : React ( appli sur un autre repo )
@@ -37,6 +38,9 @@ Etapes Mise en place de l'Api :
   - rentrer votre clé de pass encore une fois
   - rendez vous dans le dossier jwt ( cd config/jwt ) et regarder les droit de lecture sur fichier private.pem
   - si les droits de lecture ne sont pas autorisé pour les groups & autre : chmod 644 private.pem
+  
+Etapes de config pour Sonata Admin :
+  - Changer l'url du paramétre d'environnement 'param.url' dans le fichier 'config/services.yaml par l'addresse de votre site Front End si différente de l'application react Vote4Lunch associé (disponible sur mon github)
 
 ## Développer par Elnéris Dang pour Omnilog SAS
 
