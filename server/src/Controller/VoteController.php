@@ -4,7 +4,6 @@
 namespace App\Controller;
 
 
-use App\Entity\Place;
 use App\Entity\Vote;
 use App\Repository\PlaceRepository;
 use App\Repository\UserRepository;
