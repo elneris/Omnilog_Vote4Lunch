@@ -2,7 +2,6 @@
 
 {% block field %}
     <div>
-       <a href="{{ object|voteUrl }}">{{ object.voteUrl }}</a>
-
+       <a href="{{ object|voteUrl }}" target="_blank">{{ object|voteUrl }}</a>
     </div>
 {% endblock %}
