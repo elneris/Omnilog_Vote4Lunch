@@ -32,7 +32,7 @@ class Voice
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="ce champs est obligatoire")
      * @Assert\Length(
-     *     min= 4,
+     *     min= 2,
      *     max= 50,
      *     minMessage="Minimum 4 caracters",
      *     maxMessage="Maximum 50 caracters"
@@ -45,7 +45,7 @@ class Voice
      * @Assert\NotBlank(message="ce champs est obligatoire")
      * @Assert\Email(message="Cet email n'est pas valide")
      * @Assert\Length(
-     *     min= 4,
+     *     min= 3,
      *     max= 50,
      *     minMessage="Minimum 4 caracters",
      *     maxMessage="Maximum 50 caracters"
