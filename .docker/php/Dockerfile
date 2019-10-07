@@ -7,6 +7,11 @@ RUN apt-get update \
     zlib1g-dev \
     sudo
 
+RUN apt-get update && apt-get install -y zlib1g-dev libicu-dev g++\
+    && docker-php-ext-configure intl\
+    && docker-php-ext-install intl\
+    && docker-php-ext-enable intl
+
 RUN docker-php-ext-install pdo pdo_mysql zip
 
 COPY php.ini /usr/local/etc/php/php.ini
