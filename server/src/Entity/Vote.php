@@ -48,7 +48,6 @@ class Vote implements \JsonSerializable
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\GreaterThan("now")
      * @Assert\DateTime(message="ce champs n'est pas une date")
      * @Assert\NotBlank(message="ce champs est obligatoire")
      */
@@ -56,7 +55,6 @@ class Vote implements \JsonSerializable
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\GreaterThan("now")
      * @Assert\DateTime(message="ce champs n'est pas une date")
      * @Assert\NotBlank(message="ce champs est obligatoire")
      */
