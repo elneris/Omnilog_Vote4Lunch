@@ -12,15 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ApiResource(
- *     collectionOperations={
- *         "user_add"={"name"="user_add"},
- *         "user_exists"={"name"="user_exists"},
- *         "user_login"={"name"="user_login"},
- *     },
- *     itemOperations={
- *     }
- * )
+ * @ApiResource()
  * @UniqueEntity("email", message="Cet email est déjà utilisé par un autre utilisateur")
  * @UniqueEntity("pseudo", message="Ce pseudo est déjà utilisé par un autre utilisateur")
  */

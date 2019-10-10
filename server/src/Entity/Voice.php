@@ -8,16 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VoiceRepository")
- * @ApiResource(
- *     collectionOperations={
- *         "voice_add"={"name"="voice_add"},
- *         "voice_delete"={"name"="voice_delete"},
- *         "voice_count_all"={"name"="voice_count_all"},
- *         "voice_get_all_foruser"={"name"="voice_get_all_foruser"},
- *         "voice_get_all_forvote"={"name"="voice_get_all_forvote"},
- *     },
- *     itemOperations={}
- * )
+ * @ApiResource()
  */
 class Voice
 {

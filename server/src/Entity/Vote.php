@@ -11,19 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VoteRepository")
- * @ApiResource(
- *     collectionOperations={
- *         "vote_add"={"name"="vote_add"},
- *         "vote_del"={"name"="vote_del"},
- *         "vote_getVote"={"name"="vote_getVote"},
- *         "vote_get_mine"={"name"="vote_get_mine"},
- *         "vote_add_place"={"name"="vote_add_place"},
- *         "vote_del_place"={"name"="vote_del_place"},
- *         "vote_get_places_list"={"name"="vote_get_places_list"},
- *     },
- *     itemOperations={
- *     }
- * )
+ * @ApiResource()
  */
 class Vote implements \JsonSerializable
 {
