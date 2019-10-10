@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6200b85ada4accdd92128ac0c3c7dc07",
+    "content-hash": "e1ba205347919b8466e05496a081cb50",
     "packages": [
         {
             "name": "api-platform/api-pack",
@@ -5049,7 +5049,7 @@
         },
         {
             "name": "symfony/options-resolver",
-            "version": "v4.3.4",
+            "version": "v4.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/options-resolver.git",
