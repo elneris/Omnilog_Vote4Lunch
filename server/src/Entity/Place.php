@@ -9,13 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PlaceRepository")
- * @ApiResource(
- *     collectionOperations={
- *         "list_place"={"name"="list_place"},
- *     },
- *     itemOperations={
- *     }
- * )
+ * @ApiResource()
  */
 class Place implements \JsonSerializable
 {

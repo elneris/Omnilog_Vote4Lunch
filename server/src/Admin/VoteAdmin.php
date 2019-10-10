@@ -15,6 +15,7 @@ use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
 use Sonata\Form\Type\DateTimePickerType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 
 final class VoteAdmin extends AbstractAdmin
@@ -86,8 +87,18 @@ final class VoteAdmin extends AbstractAdmin
                 ->tab('Votes')
                 ->with('Liste des votes')
                 ->add('voices', CollectionType::class, [
-                    'by_reference' => false,
-                ], [
+                    'type_options' => [
+                        'btn_add' => true,
+                        'delete' => false,
+                        'delete_options' => [
+                            'type'         => HiddenType::class,
+                            'type_options' => [
+                                'mapped'   => false,
+                                'required' => false,
+                            ]
+                        ]
+                    ]
+                 ], [
                     'edit' => 'inline',
                     'inline' => 'table',
                 ])
