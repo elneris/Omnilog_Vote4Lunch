@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,12 +10,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ApiResource()
  * @UniqueEntity("email", message="Cet email est déjà utilisé par un autre utilisateur")
  * @UniqueEntity("pseudo", message="Ce pseudo est déjà utilisé par un autre utilisateur")
+ * @ApiFilter(
+ *     SearchFilter::class, properties={"email": "exact", "pseudo": "exact"}
+ * )
  */
 class User implements UserInterface
 {
@@ -25,7 +30,10 @@ class User implements UserInterface
      */
     private $id;
 
-    private $plainPassword;
+    /**
+     * @var bool
+     */
+    private $created;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -44,8 +52,6 @@ class User implements UserInterface
      * @ORM\Column(type="json")
      */
     private $roles = [];
-
-    private $isAdmin;
 
     /**
      * @var string The hashed password
@@ -80,6 +86,7 @@ class User implements UserInterface
     public function __construct()
     {
         $this->votes = new ArrayCollection();
+        $this->created = true;
     }
 
     public function __toString()
@@ -87,18 +94,9 @@ class User implements UserInterface
         return $this->email;
     }
 
-    public function getPlainPassword()
+    public function getCreated(): bool
     {
-        return $this->plainPassword;
-    }
-
-    public function getIsAdmin(): ?bool
-    {
-        if (in_array('ROLE_ADMIN', $this->getRoles(), true)) {
-            return true;
-        }
-
-        return false;
+        return $this->created;
     }
 
     public function getId(): ?int

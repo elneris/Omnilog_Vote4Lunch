@@ -15,19 +15,30 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PlaceController extends AbstractController
 {
-    private $options;
+    private $resolver;
 
-    public function __construct(array $options = [])
+    public function __construct()
     {
         $resolver = new OptionsResolver();
-        $resolver->setDefaults([
-            'ne_lat' => 0,
-            'ne_lng' => 0,
-            'sw_lat' => 0,
-            'sw_lng' => 0,
-        ]);
+        $this->configureOptions($resolver);
 
-        $this->options = $resolver->resolve($options);
+        $this->resolver = $resolver;
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver
+            ->setDefaults([
+            'ne_lat' => null,
+            'ne_lng' => null,
+            'sw_lat' => null,
+            'sw_lng' => null,
+        ])
+            ->setAllowedTypes('ne_lat', 'string')
+            ->setAllowedTypes('sw_lat', 'string')
+            ->setAllowedTypes('ne_lng', 'string')
+            ->setAllowedTypes('sw_lng', 'string')
+        ;
     }
 
     /**
@@ -38,14 +49,12 @@ class PlaceController extends AbstractController
      */
     public function list(Request $request, PlaceRepository $placeRepository): Response
     {
-        if (!($request->query->get('ne_lat') && $request->query->get('ne_lng') && $request->query->get('sw_lat') && $request->query->get('sw_lng'))) {
-            return new Response('Aucun restaurant trouvé', 400);
-        }
+        $options = $this->resolver->resolve($request->query->all());
 
-        $neLat = $request->query->get('ne_lat') ?: $this->options['ne_lat'];
-        $swLat = $request->query->get('sw_lat') ?: $this->options['sw_lat'];
-        $neLng = $request->query->get('ne_lng') ?: $this->options['ne_lng'];
-        $swLng = $request->query->get('sw_lng') ?: $this->options['sw_lng'];
+        $neLat = $options['ne_lat'];
+        $swLat = $options['sw_lat'];
+        $neLng = $options['ne_lng'];
+        $swLng = $options['sw_lng'];
 
         $places = $placeRepository->findByCoordonate($neLat, $neLng, $swLat, $swLng);
 
