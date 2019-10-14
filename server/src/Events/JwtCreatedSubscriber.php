@@ -16,6 +16,7 @@ class JwtCreatedSubscriber
         $user = $event->getUser();
         $data = $event->getData();
         $data['pseudo'] = $user->getPseudo();
+        $data['email'] = $user->getEmail();
 
         $event->setData($data);
     }
