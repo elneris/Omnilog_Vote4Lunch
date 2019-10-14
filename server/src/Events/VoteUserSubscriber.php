@@ -8,6 +8,7 @@ use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\Vote;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Security;
 
@@ -52,7 +53,7 @@ class VoteUserSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function setUserForVote(GetResponseForControllerResultEvent $event): void
+    public function setUserForVote(ViewEvent $event): void
     {
         $vote = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
