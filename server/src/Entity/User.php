@@ -14,7 +14,9 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ApiResource()
+ * @ApiResource(
+ *     itemOperations={"get"},
+ * )
  * @UniqueEntity("email", message="Cet email est déjà utilisé par un autre utilisateur")
  * @UniqueEntity("pseudo", message="Ce pseudo est déjà utilisé par un autre utilisateur")
  * @ApiFilter(
@@ -31,7 +33,7 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @var bool
+     * @ORM\Column(type="boolean")
      */
     private $created;
 
@@ -83,6 +85,8 @@ class User implements UserInterface
      */
     private $votes;
 
+    private $exist;
+
     public function __construct()
     {
         $this->votes = new ArrayCollection();
@@ -94,7 +98,12 @@ class User implements UserInterface
         return $this->email;
     }
 
-    public function getCreated(): bool
+    public function getExist()
+    {
+        return ['exist' => true];
+    }
+
+    public function getCreated()
     {
         return $this->created;
     }
