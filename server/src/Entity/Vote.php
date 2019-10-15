@@ -7,6 +7,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
@@ -16,17 +17,19 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  * @ApiResource(
  *     collectionOperations={"get", "post"},
  *     itemOperations={"get", "delete", "put"},
+ *     normalizationContext={"groups"={"add_vote"}},
  * )
  * @ApiFilter(
  *     SearchFilter::class, properties={"user", "url"}
  * )
  */
-class Vote implements \JsonSerializable
+class Vote
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"add_vote"})
      */
     private $id;
 
@@ -39,6 +42,7 @@ class Vote implements \JsonSerializable
      *     minMessage="Minimum 4 caracters",
      *     maxMessage="Maximum 50 caracters"
      * )
+     * @Groups({"add_vote"})
      */
     private $title;
 
@@ -46,6 +50,7 @@ class Vote implements \JsonSerializable
      * @ORM\Column(type="datetime")
      * @Assert\DateTime(message="ce champs n'est pas une date")
      * @Assert\NotBlank(message="ce champs est obligatoire")
+     * @Groups({"add_vote"})
      */
     private $date;
 
@@ -53,26 +58,31 @@ class Vote implements \JsonSerializable
      * @ORM\Column(type="datetime")
      * @Assert\DateTime(message="ce champs n'est pas une date")
      * @Assert\NotBlank(message="ce champs est obligatoire")
+     * @Groups({"add_vote"})
      */
     private $endDate;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"add_vote"})
      */
     private $url;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
+     * @Groups({"add_vote"})
      */
     private $active;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"add_vote"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"add_vote"})
      */
     private $updatedAt;
 
@@ -82,6 +92,11 @@ class Vote implements \JsonSerializable
      * @Assert\NotBlank(message="ce champs est obligatoire")
      */
     private $user;
+
+    /**
+     * @Groups({"add_vote"})
+     */
+    private $userId;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Voice", mappedBy="vote", cascade={"persist", "remove"})
@@ -99,7 +114,6 @@ class Vote implements \JsonSerializable
         $this->places = new ArrayCollection();
         $this->updatedAt = new \DateTime();
         $this->createdAt = new \DateTime();
-        $this->setActive(0);
         $url = '';
         $value = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -113,6 +127,11 @@ class Vote implements \JsonSerializable
     public function __toString()
     {
         return $this->title;
+    }
+
+    public function getUserId()
+    {
+        return $this->getUser()->getId();
     }
 
     /**
@@ -198,7 +217,7 @@ class Vote implements \JsonSerializable
         return $this->active;
     }
 
-    public function setActive(bool $active): self
+    public function setActive($active): self
     {
         $this->active = $active;
 
@@ -296,31 +315,5 @@ class Vote implements \JsonSerializable
         }
 
         return $this;
-    }
-
-    /**
-     * Specify data which should be serialized to JSON
-     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @since 5.4.0
-     */
-    public function jsonSerialize()
-    {
-        return [
-            'id' => $this->getId(),
-            'userId' => $this->getUser()->getId(),
-            'title' => $this->getTitle(),
-            'date' => $this->getDate(),
-            'end_date' => $this->getEndDate(),
-            'url' => $this->getUrl(),
-            'updatedAt' => $this->getUpdatedAt(),
-            'createdAt' => $this->getCreatedAt(),
-            'active' => $this->getActive(),
-            'user' => [
-                'pseudo' => $this->getUser()->getPseudo(),
-                'email' => $this->getUser()->getEmail(),
-            ],
-        ];
     }
 }
