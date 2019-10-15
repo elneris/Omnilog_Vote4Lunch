@@ -21,10 +21,9 @@ class JwtCreatedSubscriber
         $expiration = new \DateTime('+1 day');
         $expiration->setTime(2, 0, 0);
 
-        $payload = $event->getData();
-        $payload['exp'] = $expiration->getTimestamp();
+        $data['exp'] = $expiration->getTimestamp();
 
         $event->setData($data);
-        $event->setData($payload);
+
     }
 }

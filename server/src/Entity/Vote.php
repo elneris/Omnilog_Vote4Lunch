@@ -7,17 +7,30 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\AddPlaceVoteController;
+use App\Controller\DelPlaceVoteController;
 
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VoteRepository")
  * @ApiResource(
  *     collectionOperations={"get", "post"},
- *     itemOperations={"get", "delete", "put"},
- *     normalizationContext={"groups"={"add_vote"}},
+ *     itemOperations={
+ *         "get",
+ *         "delete",
+ *         "delete_place"={
+ *             "method"="PUT",
+ *             "path"="/votes/{id}/del_place",
+ *             "controller"=DelPlaceVoteController::class,
+ *         },
+ *         "add_place"={
+ *             "method"="PUT",
+ *             "path"="/votes/{id}/add_place",
+ *             "controller"=AddPlaceVoteController::class,
+ *         },
+ *     },
  * )
  * @ApiFilter(
  *     SearchFilter::class, properties={"user", "url"}
@@ -29,7 +42,6 @@ class Vote
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"add_vote"})
      */
     private $id;
 
@@ -42,7 +54,6 @@ class Vote
      *     minMessage="Minimum 4 caracters",
      *     maxMessage="Maximum 50 caracters"
      * )
-     * @Groups({"add_vote"})
      */
     private $title;
 
@@ -50,7 +61,6 @@ class Vote
      * @ORM\Column(type="datetime")
      * @Assert\DateTime(message="ce champs n'est pas une date")
      * @Assert\NotBlank(message="ce champs est obligatoire")
-     * @Groups({"add_vote"})
      */
     private $date;
 
@@ -58,31 +68,26 @@ class Vote
      * @ORM\Column(type="datetime")
      * @Assert\DateTime(message="ce champs n'est pas une date")
      * @Assert\NotBlank(message="ce champs est obligatoire")
-     * @Groups({"add_vote"})
      */
     private $endDate;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"add_vote"})
      */
     private $url;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
-     * @Groups({"add_vote"})
      */
     private $active;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"add_vote"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"add_vote"})
      */
     private $updatedAt;
 
@@ -92,11 +97,6 @@ class Vote
      * @Assert\NotBlank(message="ce champs est obligatoire")
      */
     private $user;
-
-    /**
-     * @Groups({"add_vote"})
-     */
-    private $userId;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Voice", mappedBy="vote", cascade={"persist", "remove"})
@@ -127,11 +127,6 @@ class Vote
     public function __toString()
     {
         return $this->title;
-    }
-
-    public function getUserId()
-    {
-        return $this->getUser()->getId();
     }
 
     /**

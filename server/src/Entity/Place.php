@@ -14,7 +14,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  * @ORM\Entity(repositoryClass="App\Repository\PlaceRepository")
  * @ApiResource(
  *     collectionOperations={"get"},
- *     itemOperations={},
+ *     itemOperations={"get"},
  * )
  * @ApiFilter(
  *     RangeFilter::class, properties={"lat", "lng"}
