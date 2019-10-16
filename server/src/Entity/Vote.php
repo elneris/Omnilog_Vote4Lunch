@@ -11,12 +11,28 @@ use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Controller\AddPlaceVoteController;
 use App\Controller\DelPlaceVoteController;
+use App\Controller\GetPlacesVoteController;
+use App\Controller\GetMyVoteController;
 
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VoteRepository")
  * @ApiResource(
- *     collectionOperations={"get", "post"},
+ *     collectionOperations={
+ *         "get",
+ *         "post",
+ *         "get_places"={
+ *             "method"="POST",
+ *             "path"="/votes/places",
+ *             "controller"=GetPlacesVoteController::class,
+ *         },
+ *     "get_myvotes"={
+ *             "method"="GET",
+ *             "path"="/votes/mines",
+ *             "controller"=GetMyVoteController::class,
+ *         },
+ *
+ *     },
  *     itemOperations={
  *         "get",
  *         "delete",
@@ -33,7 +49,7 @@ use App\Controller\DelPlaceVoteController;
  *     },
  * )
  * @ApiFilter(
- *     SearchFilter::class, properties={"user", "url"}
+ *     SearchFilter::class, properties={"user": "exact", "url"}
  * )
  */
 class Vote
