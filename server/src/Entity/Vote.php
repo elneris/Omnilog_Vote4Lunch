@@ -332,4 +332,14 @@ class Vote
 
         return $this;
     }
+
+    public function getPseudo()
+    {
+        return $this->getUser()->getPseudo();
+    }
+
+    public function getEmail()
+    {
+        return $this->getUser()->getEmail();
+    }
 }
