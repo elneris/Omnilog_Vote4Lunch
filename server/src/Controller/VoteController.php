@@ -88,14 +88,8 @@ class VoteController extends AbstractController
         throw new BadRequestHttpException('Error when add a new vote',null, 400);
     }*/
 
-    /**
-     * Get a vote from his url and delete it
-     *
-     * @Route("/del", name="vote_del", methods={"post"})
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function del(Request $request): JsonResponse
+
+   /* public function del(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -104,7 +98,7 @@ class VoteController extends AbstractController
         $this->manager->flush();
 
         return new JsonResponse(['delete' => true]);
-    }
+    }*/
 
 
   /*  public function getVote(Request $request): Response

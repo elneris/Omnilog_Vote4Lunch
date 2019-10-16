@@ -9,10 +9,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use App\Controller\AddPlaceVoteController;
-use App\Controller\DelPlaceVoteController;
-use App\Controller\GetPlacesVoteController;
-use App\Controller\GetMyVoteController;
+use App\Controller\Vote\AddPlaceVoteController;
+use App\Controller\Vote\DelPlaceVoteController;
+use App\Controller\Vote\GetPlacesVoteController;
+use App\Controller\Vote\GetMyVoteController;
+use App\Controller\Vote\DelVoteController;
 
 
 /**
@@ -26,16 +27,20 @@ use App\Controller\GetMyVoteController;
  *             "path"="/votes/places",
  *             "controller"=GetPlacesVoteController::class,
  *         },
- *     "get_myvotes"={
+ *         "get_myvotes"={
  *             "method"="GET",
  *             "path"="/votes/mines",
  *             "controller"=GetMyVoteController::class,
+ *         },
+ *         "delete"={
+ *             "method"="DELETE",
+ *             "path"="/votes/delete",
+ *             "controller"=DelVoteController::class,
  *         },
  *
  *     },
  *     itemOperations={
  *         "get",
- *         "delete",
  *         "delete_place"={
  *             "method"="PUT",
  *             "path"="/votes/{id}/del_place",

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller;
+namespace App\Controller\Vote;
 
 
 use App\Repository\UserRepository;
@@ -45,6 +45,7 @@ class GetMyVoteController implements \JsonSerializable
      */
     public function jsonSerialize()
     {
+        $result= [];
         foreach ($this->votes as $vote) {
             $result[] = [
                 'id' => $vote->getId(),
