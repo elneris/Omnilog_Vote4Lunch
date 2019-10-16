@@ -58,14 +58,9 @@ class VoiceController extends AbstractController
         $this->placeRepository = $placeRepository;
     }
 
-    /**
-     * add a voice
-     *
-     * @Route("/add", name="voice_add", methods={"post"})
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function add(Request $request): JsonResponse
+    // Old code that i let for my own experience use for classic api without passing by api platform
+
+    /*public function add(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -90,16 +85,10 @@ class VoiceController extends AbstractController
         }
 
         throw new BadRequestHttpException('Error when add a new voice',null, 400);
-    }
+    }*/
 
-    /**
-     * Delete a voice
-     *
-     * @Route("/delete", name="voice_delete", methods={"post"})
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function delete(Request $request): JsonResponse
+
+    /*public function delete(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -128,7 +117,7 @@ class VoiceController extends AbstractController
         }
 
         throw new BadRequestHttpException('Error when delete a voice',null, 400);
-    }
+    }*/
 
     /**
      * Return the sum of voices for a vote and a place

@@ -7,12 +7,29 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\Voice\AddVoiceController;
+use App\Controller\Voice\DelVoiceController;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VoiceRepository")
  * @ApiResource(
- *     collectionOperations={"get", "post"},
- *     itemOperations={"delete"},
+ *     collectionOperations={
+ *         "get",
+ *         "add_voice"={
+ *             "method"="POST",
+ *             "path"="/voices/add",
+ *             "controller"=AddVoiceController::class,
+ *         },
+ *         "del_voice"={
+ *             "method"="DELETE",
+ *             "path"="/voices/del",
+ *             "controller"=DelVoiceController::class,
+ *         },
+ *     },
+ *     itemOperations={
+ *     "delete",
+ *     "get"
+ *     },
  * )
  * @ApiFilter(
  *     SearchFilter::class, properties={"email", "pseudo", "vote", "place"}
