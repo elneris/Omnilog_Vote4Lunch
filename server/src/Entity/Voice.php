@@ -9,12 +9,23 @@ use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Controller\Voice\AddVoiceController;
 use App\Controller\Voice\DelVoiceController;
+use App\Controller\Voice\CountAllVoiceByPlaceController;
+use App\Controller\Voice\GetAllVoiceByVoteController;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VoiceRepository")
  * @ApiResource(
  *     collectionOperations={
- *         "get",
+ *         "count_all"={
+ *             "method"="GET",
+ *             "path"="/voices/count/all",
+ *             "controller"=CountAllVoiceByPlaceController::class,
+ *         },
+ *         "get_all"={
+ *             "method"="GET",
+ *             "path"="/voices/get/all",
+ *             "controller"=GetAllVoiceByVoteController::class,
+ *         },
  *         "add_voice"={
  *             "method"="POST",
  *             "path"="/voices/add",
@@ -26,10 +37,7 @@ use App\Controller\Voice\DelVoiceController;
  *             "controller"=DelVoiceController::class,
  *         },
  *     },
- *     itemOperations={
- *     "delete",
- *     "get"
- *     },
+ *     itemOperations={"get"},
  * )
  * @ApiFilter(
  *     SearchFilter::class, properties={"email", "pseudo", "vote", "place"}

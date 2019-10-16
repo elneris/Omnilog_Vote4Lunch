@@ -119,14 +119,8 @@ class VoiceController extends AbstractController
         throw new BadRequestHttpException('Error when delete a voice',null, 400);
     }*/
 
-    /**
-     * Return the sum of voices for a vote and a place
-     *
-     * @Route("/count/all", name="voice_count_all", methods={"get"})
-     * @param Request $request
-     * @return Response
-     */
-    public function countAll(Request $request): Response
+
+    /*public function countAll(Request $request): Response
     {
         $data = $request->query->all();
 
@@ -152,15 +146,9 @@ class VoiceController extends AbstractController
         }
 
         throw new BadRequestHttpException('Error vote not found',null, 400);
-    }
+    }*/
 
-    /**
-     * Get all voices for an array of votes URL
-     *
-     * @Route("/get/all/foruser", name="voice_get_all_foruser", methods={"get"})
-     * @param Request $request
-     * @return Response
-     */
+
     public function getAllForuser(Request $request): Response
     {
         $data = $request->query->all();
@@ -183,14 +171,8 @@ class VoiceController extends AbstractController
         return new Response($jsonReturn);
     }
 
-    /**
-     * Get all voices for a vote URL
-     *
-     * @Route("/get/all/forvote", name="voice_get_all_forvote", methods={"get"})
-     * @param Request $request
-     * @return Response
-     */
-    public function getAllForvote(Request $request): Response
+
+    /*public function getAllForvote(Request $request): Response
     {
         $data = $request->query->all();
 
@@ -205,5 +187,5 @@ class VoiceController extends AbstractController
         }
 
         throw new BadRequestHttpException('Error vote not found',null, 400);
-    }
+    }*/
 }
