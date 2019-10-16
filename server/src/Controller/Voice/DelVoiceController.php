@@ -45,7 +45,7 @@ class DelVoiceController
             $place = $this->placeRepository->findOneBy(['id' => $data['place_id']]);
 
 
-            $checkVoice = $this->voiceRepository->findBy([
+            $checkVoice = $this->voiceRepository->findOneBy([
                 'pseudo' => $data['pseudo'],
                 'email' => $data['email'],
                 'place' => $place,

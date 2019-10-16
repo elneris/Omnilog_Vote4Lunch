@@ -148,7 +148,6 @@ class VoiceController extends AbstractController
         throw new BadRequestHttpException('Error vote not found',null, 400);
     }*/
 
-
     public function getAllForuser(Request $request): Response
     {
         $data = $request->query->all();

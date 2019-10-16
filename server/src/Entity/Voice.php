@@ -11,6 +11,7 @@ use App\Controller\Voice\AddVoiceController;
 use App\Controller\Voice\DelVoiceController;
 use App\Controller\Voice\CountAllVoiceByPlaceController;
 use App\Controller\Voice\GetAllVoiceByVoteController;
+use App\Controller\Voice\GetAllVoiceForUserController;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VoiceRepository")
@@ -20,6 +21,11 @@ use App\Controller\Voice\GetAllVoiceByVoteController;
  *             "method"="GET",
  *             "path"="/voices/count/all",
  *             "controller"=CountAllVoiceByPlaceController::class,
+ *         },
+ *         "get_all_voice_all_votes"={
+ *             "method"="GET",
+ *             "path"="/voices/get/all/for_user",
+ *             "controller"=GetAllVoiceForUserController::class,
  *         },
  *         "get_all"={
  *             "method"="GET",
