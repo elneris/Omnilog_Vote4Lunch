@@ -23,7 +23,7 @@ use App\Controller\Vote\DelVoteController;
  *         "get",
  *         "post",
  *         "get_places"={
- *             "method"="POST",
+ *             "method"="GET",
  *             "path"="/votes/places",
  *             "controller"=GetPlacesVoteController::class,
  *         },

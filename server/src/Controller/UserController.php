@@ -49,12 +49,10 @@ class UserController extends AbstractController
         $this->userRepository = $userRepository;
     }
 
-    /**
-     * @Route("/add", name="user_add", methods={"post"})
-     * @param Request $request
-     * @return JsonResponse|null
-     */
-    public function add(Request $request): ?JsonResponse
+
+    // Old code that i let for my own experience use for classic api without passing by api platform
+
+    /*public function add(Request $request): ?JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -75,14 +73,10 @@ class UserController extends AbstractController
         }
 
         throw new BadRequestHttpException('Errors duraing add user',null, 400);
-    }
+    }*/
 
-    /**
-     * @Route("/exists", name="user_exists", methods={"get"})
-     * @param Request $request
-     * @return JsonResponse|null
-     */
-    public function exists(Request $request): ?JsonResponse
+
+    /*public function exists(Request $request): ?JsonResponse
     {
         $data = $request->query->all();
 
@@ -107,14 +101,10 @@ class UserController extends AbstractController
         }
 
         throw new BadRequestHttpException('Errors during check if user exist',null, 400);
-    }
+    }*/
 
-    /**
-     * @Route("/login", name="user_login", methods={"post"})
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function login(Request $request): JsonResponse
+
+    /*public function login(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -135,5 +125,5 @@ class UserController extends AbstractController
         }
 
         throw new BadRequestHttpException('Errors during the login process',null, 400);
-    }
+    }*/
 }

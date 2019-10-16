@@ -20,9 +20,9 @@ class GetPlacesVoteController
 
     public function __invoke(Request $request)
     {
-        $data = json_decode($request->getContent(), true);
+        $data = $request->query->get('vote_url');
 
-        $vote = $this->voteRepository->findOneBy(['url' => $data['vote_url']]);
+        $vote = $this->voteRepository->findOneBy(['url' => $data]);
 
         if ($vote) {
             $returnResponse = $vote->getPlaces()->toArray();

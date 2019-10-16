@@ -25,7 +25,9 @@ class PlaceController extends AbstractController
         $this->resolver = $resolver;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    // Old code that i let for my own experience use for classic api without passing by api platform
+
+    /*public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
             ->setDefaults([
@@ -39,15 +41,10 @@ class PlaceController extends AbstractController
             ->setAllowedTypes('ne_lng', 'string')
             ->setAllowedTypes('sw_lng', 'string')
         ;
-    }
+    }*/
 
-    /**
-     * @Route("/api/place/list", name="list_place", methods={"get"})
-     * @param Request $request
-     * @param PlaceRepository $placeRepository
-     * @return Response
-     */
-    public function list(Request $request, PlaceRepository $placeRepository): Response
+
+    /*public function list(Request $request, PlaceRepository $placeRepository): Response
     {
         $options = $this->resolver->resolve($request->query->all());
 
@@ -64,5 +61,5 @@ class PlaceController extends AbstractController
 
         return new JsonResponse($places);
 
-    }
+    }*/
 }

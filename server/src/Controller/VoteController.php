@@ -59,6 +59,8 @@ class VoteController extends AbstractController
         $this->placeRepository = $placeRepository;
     }
 
+  // Old code that i let for my own experience use for classic api without passing by api platform
+
 
     /*public function add(Request $request): Response
     {
