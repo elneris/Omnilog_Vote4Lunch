@@ -59,15 +59,10 @@ class VoteController extends AbstractController
         $this->placeRepository = $placeRepository;
     }
 
-    /**
-     * Create a vote and return vote data
-     *
-     * @Route("/add", name="vote_add", methods={"post"})
-     * @param Request $request
-     * @return Response
-     * @throws Exception
-     */
-    public function add(Request $request): Response
+  // Old code that i let for my own experience use for classic api without passing by api platform
+
+
+    /*public function add(Request $request): Response
     {
         $data = json_decode($request->getContent(), true);
 
@@ -93,16 +88,10 @@ class VoteController extends AbstractController
         }
 
         throw new BadRequestHttpException('Error when add a new vote',null, 400);
-    }
+    }*/
 
-    /**
-     * Get a vote from his url and delete it
-     *
-     * @Route("/del", name="vote_del", methods={"post"})
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function del(Request $request): JsonResponse
+
+   /* public function del(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -111,16 +100,10 @@ class VoteController extends AbstractController
         $this->manager->flush();
 
         return new JsonResponse(['delete' => true]);
-    }
+    }*/
 
-    /**
-     * Get a vote from this url and return it
-     *
-     * @Route("/getVote", name="vote_getVote", methods={"get"})
-     * @param Request $request
-     * @return Response
-     */
-    public function getVote(Request $request): Response
+
+  /*  public function getVote(Request $request): Response
     {
         $data = $request->query->all();
 
@@ -129,16 +112,10 @@ class VoteController extends AbstractController
         $jsonVote = json_encode($vote);
 
         return new Response($jsonVote);
-    }
+    }*/
 
-    /**
-     * Get all votes from a user and return them
-     *
-     * @Route("/get/mine", name="vote_get_mine", methods={"get"})
-     * @param Request $request
-     * @return Response
-     */
-    public function getMine(Request $request): Response
+
+    /*public function getMine(Request $request): Response
     {
         $data = $request->query->all();
 
@@ -147,16 +124,10 @@ class VoteController extends AbstractController
         $votes = $this->voteRepository->findBy(['user' => $user], ['date' => 'ASC']);
 
         return new Response(json_encode($votes));
-    }
+    }*/
 
-    /**
-     * Add a place to a vote and return it
-     *
-     * @Route("/add/place", name="vote_add_place", methods={"post"})
-     * @param Request $request
-     * @return Response
-     */
-    public function addPlace(Request $request): Response
+
+    /*public function addPlace(Request $request): Response
     {
         $data = json_decode($request->getContent(), true);
 
@@ -183,30 +154,20 @@ class VoteController extends AbstractController
         }
 
         throw new BadRequestHttpException('Errors no vote found',null, 400);
-    }
+    }*/
 
-    /**
-     * Desactivate vote instance if no places is associated
-     *
-     * @param Vote $vote
-     */
-    public function makeThings(Vote $vote): void
+
+    /*public function makeThings(Vote $vote): void
     {
         if ($vote->getPlaces()->toArray() === []) {
             $vote->setActive(0);
 
             $this->manager->flush();
         }
-    }
+    }*/
 
-    /**
-     * Delete a place from a vote and return it
-     *
-     * @Route("/del/place", name="vote_del_place", methods={"post"})
-     * @param Request $request
-     * @return Response
-     */
-    public function delPlace(Request $request): Response
+
+    /*public function delPlace(Request $request): Response
     {
         $data = json_decode($request->getContent(), true);
 
@@ -230,16 +191,10 @@ class VoteController extends AbstractController
         }
 
         throw new BadRequestHttpException('Errors no vote found',null, 400);
-    }
+    }*/
 
-    /**
-     * Get the list of places for a vote
-     *
-     * @Route("/get/places/list", name="vote_get_places_list", methods={"post"})
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function getPlacesList(Request $request): JsonResponse
+
+    /*public function getPlacesList(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -252,5 +207,5 @@ class VoteController extends AbstractController
         }
 
         throw new BadRequestHttpException('Errors no vote found',null, 400);
-    }
+    }*/
 }

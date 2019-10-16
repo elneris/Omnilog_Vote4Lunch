@@ -16,7 +16,14 @@ class JwtCreatedSubscriber
         $user = $event->getUser();
         $data = $event->getData();
         $data['pseudo'] = $user->getPseudo();
+        $data['email'] = $user->getEmail();
+
+        $expiration = new \DateTime('+1 day');
+        $expiration->setTime(2, 0, 0);
+
+        $data['exp'] = $expiration->getTimestamp();
 
         $event->setData($data);
+
     }
 }

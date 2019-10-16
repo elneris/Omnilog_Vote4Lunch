@@ -58,14 +58,9 @@ class VoiceController extends AbstractController
         $this->placeRepository = $placeRepository;
     }
 
-    /**
-     * add a voice
-     *
-     * @Route("/add", name="voice_add", methods={"post"})
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function add(Request $request): JsonResponse
+    // Old code that i let for my own experience use for classic api without passing by api platform
+
+    /*public function add(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -90,16 +85,10 @@ class VoiceController extends AbstractController
         }
 
         throw new BadRequestHttpException('Error when add a new voice',null, 400);
-    }
+    }*/
 
-    /**
-     * Delete a voice
-     *
-     * @Route("/delete", name="voice_delete", methods={"post"})
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function delete(Request $request): JsonResponse
+
+    /*public function delete(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -128,16 +117,10 @@ class VoiceController extends AbstractController
         }
 
         throw new BadRequestHttpException('Error when delete a voice',null, 400);
-    }
+    }*/
 
-    /**
-     * Return the sum of voices for a vote and a place
-     *
-     * @Route("/count/all", name="voice_count_all", methods={"get"})
-     * @param Request $request
-     * @return Response
-     */
-    public function countAll(Request $request): Response
+
+    /*public function countAll(Request $request): Response
     {
         $data = $request->query->all();
 
@@ -163,15 +146,8 @@ class VoiceController extends AbstractController
         }
 
         throw new BadRequestHttpException('Error vote not found',null, 400);
-    }
+    }*/
 
-    /**
-     * Get all voices for an array of votes URL
-     *
-     * @Route("/get/all/foruser", name="voice_get_all_foruser", methods={"get"})
-     * @param Request $request
-     * @return Response
-     */
     public function getAllForuser(Request $request): Response
     {
         $data = $request->query->all();
@@ -194,14 +170,8 @@ class VoiceController extends AbstractController
         return new Response($jsonReturn);
     }
 
-    /**
-     * Get all voices for a vote URL
-     *
-     * @Route("/get/all/forvote", name="voice_get_all_forvote", methods={"get"})
-     * @param Request $request
-     * @return Response
-     */
-    public function getAllForvote(Request $request): Response
+
+    /*public function getAllForvote(Request $request): Response
     {
         $data = $request->query->all();
 
@@ -216,5 +186,5 @@ class VoiceController extends AbstractController
         }
 
         throw new BadRequestHttpException('Error vote not found',null, 400);
-    }
+    }*/
 }

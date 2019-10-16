@@ -2,18 +2,62 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\Vote\AddPlaceVoteController;
+use App\Controller\Vote\DelPlaceVoteController;
+use App\Controller\Vote\GetPlacesVoteController;
+use App\Controller\Vote\GetMyVoteController;
+use App\Controller\Vote\DelVoteController;
 
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VoteRepository")
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={
+ *         "get",
+ *         "post",
+ *         "get_places"={
+ *             "method"="GET",
+ *             "path"="/votes/places",
+ *             "controller"=GetPlacesVoteController::class,
+ *         },
+ *         "get_myvotes"={
+ *             "method"="GET",
+ *             "path"="/votes/mines",
+ *             "controller"=GetMyVoteController::class,
+ *         },
+ *         "delete"={
+ *             "method"="DELETE",
+ *             "path"="/votes/delete",
+ *             "controller"=DelVoteController::class,
+ *         },
+ *
+ *     },
+ *     itemOperations={
+ *         "get",
+ *         "delete_place"={
+ *             "method"="PUT",
+ *             "path"="/votes/{id}/del_place",
+ *             "controller"=DelPlaceVoteController::class,
+ *         },
+ *         "add_place"={
+ *             "method"="PUT",
+ *             "path"="/votes/{id}/add_place",
+ *             "controller"=AddPlaceVoteController::class,
+ *         },
+ *     },
+ * )
+ * @ApiFilter(
+ *     SearchFilter::class, properties={"user": "exact", "url"}
+ * )
  */
-class Vote implements \JsonSerializable
+class Vote
 {
     /**
      * @ORM\Id()
@@ -54,7 +98,7 @@ class Vote implements \JsonSerializable
     private $url;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $active;
 
@@ -91,7 +135,6 @@ class Vote implements \JsonSerializable
         $this->places = new ArrayCollection();
         $this->updatedAt = new \DateTime();
         $this->createdAt = new \DateTime();
-        $this->setActive(0);
         $url = '';
         $value = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -190,7 +233,7 @@ class Vote implements \JsonSerializable
         return $this->active;
     }
 
-    public function setActive(bool $active): self
+    public function setActive($active): self
     {
         $this->active = $active;
 
@@ -290,29 +333,13 @@ class Vote implements \JsonSerializable
         return $this;
     }
 
-    /**
-     * Specify data which should be serialized to JSON
-     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @since 5.4.0
-     */
-    public function jsonSerialize()
+    public function getPseudo()
     {
-        return [
-            'id' => $this->getId(),
-            'userId' => $this->getUser()->getId(),
-            'title' => $this->getTitle(),
-            'date' => $this->getDate(),
-            'end_date' => $this->getEndDate(),
-            'url' => $this->getUrl(),
-            'updatedAt' => $this->getUpdatedAt(),
-            'createdAt' => $this->getCreatedAt(),
-            'active' => $this->getActive(),
-            'user' => [
-                'pseudo' => $this->getUser()->getPseudo(),
-                'email' => $this->getUser()->getEmail(),
-            ],
-        ];
+        return $this->getUser()->getPseudo();
+    }
+
+    public function getEmail()
+    {
+        return $this->getUser()->getEmail();
     }
 }

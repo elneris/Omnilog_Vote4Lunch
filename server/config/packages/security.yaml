@@ -8,7 +8,7 @@ security:
         users:
             entity:
                 class: 'App\Entity\User'
-                property: 'email'
+                property: 'pseudo'
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -53,7 +53,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/votes, roles: IS_AUTHENTICATED_FULLY, methods: [POST, DELETE, PUT, GET] }
+        - { path: ^/api/votes, roles: IS_AUTHENTICATED_FULLY, methods: [POST, DELETE, PUT] }
         - { path: ^/admin, roles: ROLE_ADMIN }
 
     role_hierarchy:

@@ -6,8 +6,11 @@ namespace App\Events;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\Vote;
+use App\Repository\VoteRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Security;
 
@@ -18,13 +21,19 @@ class VoteUserSubscriber implements EventSubscriberInterface
      */
     private $security;
 
+    private $repository;
+
+    private $manager;
+
     /**
      * VoteUserSubscriber constructor.
      * @param Security $security
      */
-    public function __construct(Security $security)
+    public function __construct(Security $security, EntityManagerInterface $manager, VoteRepository $repository)
     {
         $this->security = $security;
+        $this->repository = $repository;
+        $this->manager = $manager;
     }
 
     /**
@@ -48,12 +57,17 @@ class VoteUserSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::VIEW => ['setUserForVote', EventPriorities::PRE_VALIDATE]
+            KernelEvents::VIEW => ['setOptionForVote', EventPriorities::PRE_VALIDATE]
         ];
     }
 
-    public function setUserForVote(GetResponseForControllerResultEvent $event): void
+    public function setOptionForVote(ViewEvent $event): void
     {
+        $votes = $this->repository->findBy(['active' => null]);
+        foreach ($votes as $vote) {
+            $this->manager->remove($vote);
+        }
+
         $vote = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
@@ -62,6 +76,6 @@ class VoteUserSubscriber implements EventSubscriberInterface
 
             $vote->setUser($user);
         }
-
     }
+
 }
