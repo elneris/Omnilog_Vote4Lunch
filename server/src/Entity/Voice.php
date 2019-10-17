@@ -21,29 +21,56 @@ use App\Controller\Voice\GetAllVoiceForUserController;
  *             "method"="GET",
  *             "path"="/voices/count/all",
  *             "controller"=CountAllVoiceByPlaceController::class,
+ *             "swagger_context"={
+ *                 "summary": "Compter et Récupérer une collection de voix",
+ *                 "description": "Permet de récupérer un tableau avec le nombre total de voix et la liste des ces voix pour un restaurant et pour un vote",
+ *             },
  *         },
  *         "get_all_voice_all_votes"={
  *             "method"="GET",
  *             "path"="/voices/get/all/for_user",
  *             "controller"=GetAllVoiceForUserController::class,
+ *             "swagger_context"={
+ *                 "summary": "Récupérer une collection de voix",
+ *                 "description": "Permet de récupérer la liste des voix d'un utilisateur pour un vote",
+ *             },
  *         },
  *         "get_all"={
  *             "method"="GET",
  *             "path"="/voices/get/all",
  *             "controller"=GetAllVoiceByVoteController::class,
+ *             "swagger_context"={
+ *                 "summary": "Récupérer une collection de voix",
+ *                 "description": "Permet de récupérer la liste des voix par vote",
+ *             },
  *         },
  *         "add_voice"={
  *             "method"="POST",
  *             "path"="/voices/add",
  *             "controller"=AddVoiceController::class,
+ *             "swagger_context"={
+ *                 "summary": "Créer une voix",
+ *                 "description": "",
+ *             },
  *         },
  *         "del_voice"={
  *             "method"="DELETE",
  *             "path"="/voices/del",
  *             "controller"=DelVoiceController::class,
+ *             "swagger_context"={
+ *                 "summary": "Supprimer une voix",
+ *                 "description": "",
+ *             },
  *         },
  *     },
- *     itemOperations={"get"},
+ *     itemOperations={
+ *         "get"={
+ *             "swagger_context"={
+ *                 "summary": "Récupérer une voix",
+ *                 "description": "Filtre par Id",
+ *             },
+ *         }
+ *     }
  * )
  * @ApiFilter(
  *     SearchFilter::class, properties={"email", "pseudo", "vote", "place"}

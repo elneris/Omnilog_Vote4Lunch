@@ -13,8 +13,22 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PlaceRepository")
  * @ApiResource(
- *     collectionOperations={"get"},
- *     itemOperations={"get"},
+ *     collectionOperations={
+ *         "get"={
+ *             "swagger_context"={
+ *                 "summary": "Récupérer une collection de restaurants",
+ *                 "description": "Permet de récupérer la liste des restaurant dans une certaine zone délimité pour 4 coordonées",
+ *             },
+ *         },
+ *     },
+ *     itemOperations={
+ *         "get"={
+ *             "swagger_context"={
+ *                 "summary": "Récupérer un restaurant",
+ *                 "description": "Filtre par Id",
+ *             },
+ *         },
+ *     },
  * )
  * @ApiFilter(
  *     RangeFilter::class, properties={"lat", "lng"}
@@ -25,6 +39,35 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  */
 class Place implements \JsonSerializable
 {
+    public const API_PLACE = [
+        'id' => ['type' => 'integer'],
+        'name' => ['type' => 'string'],
+        'lat' => ['type' => 'integer'],
+        'lng' => ['type' => 'number'],
+        'type' => ['type' => 'string'],
+        'address' => ['type' => 'string'],
+        'city' => ['type' => 'string'],
+        'phone' => ['type' => 'string'],
+        'email' => ['type' => 'string'],
+        'website' => ['type' => 'string'],
+        'opening_hours' => ['type' => 'string'],
+        'cuisine' => ['type' => 'string'],
+        'createdAt' => [
+            'type' => 'string',
+            'format' => 'date-time'
+        ],
+        'updatedAt' => [
+            'type' => 'string',
+            'format' => 'date-time'
+        ],
+        'votes' => [
+            'type' => 'array',
+            'items' => [
+                'type' => 'string'
+            ]
+        ],
+    ];
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

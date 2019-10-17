@@ -12,10 +12,32 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ApiResource(
- *     itemOperations={"get"},
+ *     itemOperations={
+ *         "get"={
+ *             "swagger_context"={
+ *                 "summary": "Récupérer un utilisateur",
+ *                 "description": "Filtre par Id",
+ *             },
+ *         }
+ *     },
+ *     collectionOperations={
+ *         "get"={
+ *             "swagger_context"={
+ *                 "summary": "Récupérer une collection d'utilisateurs",
+ *                 "description": "Filtre par email ou pseudo",
+ *             },
+ *         },
+ *         "post"={
+ *             "swagger_context"={
+ *                 "summary": "Créer un utilisateur",
+ *                 "description": "",
+ *             },
+ *         },
+ *     },
  * )
  * @UniqueEntity("email", message="Cet email est déjà utilisé par un autre utilisateur")
  * @UniqueEntity("pseudo", message="Ce pseudo est déjà utilisé par un autre utilisateur")
