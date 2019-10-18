@@ -31,7 +31,7 @@ use App\Controller\Vote\DelVoteController;
  *                  },
  *                 "responses"={
  *                      "201" = {
- *                          "description" = "retourne les vote",
+ *                          "description" = "retourne les votes",
  *                          "schema" =  {
  *                              "type" = "array",
  *                              "items" = {
