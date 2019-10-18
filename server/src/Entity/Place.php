@@ -18,6 +18,23 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *             "swagger_context"={
  *                 "summary": "Récupérer une collection de restaurants",
  *                 "description": "Permet de récupérer la liste des restaurant dans une certaine zone délimité pour 4 coordonées",
+ *                 "parameters"={
+ *                      {"name"="lat[gte]","in"="query","required"=true,"type": "number", "description": "latitude la plus petite"},
+ *                      {"name"="lat[lte]","in"="query","required"=true,"type": "number", "description": "latitude la plus grande"},
+ *                      {"name"="lng[gte]","in"="query","required"=true,"type": "number", "description": "longitude la plus petite"},
+ *                      {"name"="lng[lte]","in"="query","required"=true,"type": "number", "description": "longitude la plus grande"},
+ *                  },
+ *                  "responses"={
+ *                      "200" = {
+ *                          "description" = "Retourne un tableau contenant tout les restaurants dans cette zone",
+ *                          "schema" =  {
+ *                              "type" = "array",
+ *                              "items" = {
+ *                                  "properties" = Place::API_PLACE,
+ *                              },
+ *                          },
+ *                      },
+ *                  },
  *             },
  *         },
  *     },
