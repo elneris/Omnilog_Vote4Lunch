@@ -20,7 +20,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *         "get"={
  *             "swagger_context"={
  *                 "summary": "Récupérer un utilisateur",
- *                 "description": "Filtre par Id",
+ *                 "description": "
+ *    Filtre par Id",
  *             },
  *         }
  *     },
@@ -28,7 +29,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *         "get"={
  *             "swagger_context"={
  *                 "summary": "Récupérer une collection d'utilisateurs",
- *                 "description": "Filtre par email ou pseudo",
+ *                 "description": "
+ *    Filtre par email ou pseudo",
  *             },
  *         },
  *         "login_check"={

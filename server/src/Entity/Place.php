@@ -17,7 +17,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *         "get"={
  *             "swagger_context"={
  *                 "summary": "Récupérer une collection de restaurants",
- *                 "description": "Permet de récupérer la liste des restaurant dans une certaine zone délimité pour 4 coordonées",
+ *                 "description": "
+ *    Permet de récupérer la liste des restaurant dans une certaine zone délimité pour 4 coordonées",
  *                 "parameters"={
  *                      {"name"="lat[gte]","in"="query","required"=true,"type": "number", "description": "latitude la plus petite"},
  *                      {"name"="lat[lte]","in"="query","required"=true,"type": "number", "description": "latitude la plus grande"},
@@ -42,7 +43,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *         "get"={
  *             "swagger_context"={
  *                 "summary": "Récupérer un restaurant",
- *                 "description": "Filtre par Id",
+ *                 "description": "
+ *    Filtre par Id",
  *             },
  *         },
  *     },
