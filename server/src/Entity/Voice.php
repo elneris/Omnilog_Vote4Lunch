@@ -2,11 +2,9 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Controller\Voice\AddVoiceController;
 use App\Controller\Voice\DelVoiceController;
 use App\Controller\Voice\CountAllVoiceByPlaceController;
@@ -21,36 +19,174 @@ use App\Controller\Voice\GetAllVoiceForUserController;
  *             "method"="GET",
  *             "path"="/voices/count/all",
  *             "controller"=CountAllVoiceByPlaceController::class,
+ *             "swagger_context"={
+ *                 "summary": "Compter et Récupérer une collection de voix",
+ *                 "description": "
+ *    Permet de récupérer un tableau avec le nombre total de voix et la liste des ces voix pour un restaurant et pour un vote",
+ *                 "parameters"={
+ *                      {"name"="vote_id", "in"="query", "type"="integer", "required"=true},
+ *                      {"name"="place_id", "in"="query", "type"="integer", "required"=true},
+ *                  },
+ *                 "responses"={
+ *                      "200" = {
+ *                          "description" = "Retourne un integer et un tableau de voix",
+ *                          "schema" =  {"properties" = Voice::API_COUNT_VOICE},
+ *                      },
+ *                  },
+ *             },
  *         },
  *         "get_all_voice_all_votes"={
  *             "method"="GET",
  *             "path"="/voices/get/all/for_user",
  *             "controller"=GetAllVoiceForUserController::class,
+ *             "swagger_context"={
+ *                 "summary": "Récupérer une collection de voix",
+ *                 "description": "
+ *    Permet de récupérer la liste des voix d'un utilisateur pour un vote",
+ *                 "parameters"={
+ *                      {"name"="pseudo", "in"="query", "type"="string", "required"=true},
+ *                      {"name"="email", "in"="query", "type"="string", "required"=true},
+ *                      {"name"="votes_url", "in"="query", "type"="string", "required"=true},
+ *                  },
+ *                 "responses"={
+ *                      "200" = {
+ *                          "description" = "Retourne un tableau de voix",
+ *                          "schema" =  {
+ *                              "type" = "array",
+ *                              "items" = {
+ *                                  "properties" = Voice::API_VOICE,
+ *                              },
+ *                          },
+ *                      },
+ *                  },
+ *             },
  *         },
  *         "get_all"={
  *             "method"="GET",
  *             "path"="/voices/get/all",
  *             "controller"=GetAllVoiceByVoteController::class,
+ *             "swagger_context"={
+ *                 "summary": "Récupérer une collection de voix",
+ *                 "description": "
+ *    Permet de récupérer la liste des voix par vote",
+ *                 "parameters"={
+ *                      {"name"="vote_url", "in"="query", "type"="string", "required"=true},
+ *                  },
+ *                 "responses"={
+ *                      "200" = {
+ *                          "description" = "Retourne un tableau de voix",
+ *                          "schema" =  {
+ *                              "type" = "array",
+ *                              "items" = {
+ *                                  "properties" = Voice::API_VOICE,
+ *                              },
+ *                          },
+ *                      },
+ *                  },
+ *             },
  *         },
  *         "add_voice"={
  *             "method"="POST",
  *             "path"="/voices/add",
  *             "controller"=AddVoiceController::class,
+ *             "swagger_context"={
+ *                 "summary": "Créer une voix",
+ *                 "description": "",
+ *                 "parameters"={
+ *                      {
+ *                          "name"="voice",
+ *                          "in"="body",
+ *                          "required"=true,
+ *                          "description"="",
+ *                          "schema" =  {
+ *                              "properties" = {
+ *                                  "pseudo": {"type": "string"},
+ *                                  "place_id": {"type": "integer"},
+ *                                  "pseudo": {"type": "string"},
+ *                                  "vote_url": {"type": "string"},
+ *                              },
+ *                          },
+ *                      },
+ *                  },
+ *                 "responses"={
+ *                      "200" = {
+ *                          "description" = "Retourne un boolean",
+ *                          "schema" =  {"properties" = {"vote": {"type": "boolean"}}}
+ *                      },
+ *                  },
+ *             },
  *         },
  *         "del_voice"={
  *             "method"="DELETE",
  *             "path"="/voices/del",
  *             "controller"=DelVoiceController::class,
+ *             "swagger_context"={
+ *                 "summary": "Supprimer une voix",
+ *                 "description": "",
+ *                 "parameters"={
+ *                      {
+ *                          "name"="voice",
+ *                          "in"="body",
+ *                          "required"=true,
+ *                          "description"="",
+ *                          "schema" =  {
+ *                              "properties" = {
+ *                                  "pseudo": {"type": "string"},
+ *                                  "place_id": {"type": "integer"},
+ *                                  "pseudo": {"type": "string"},
+ *                                  "vote_url": {"type": "string"},
+ *                              },
+ *                          },
+ *                      },
+ *                  },
+ *                 "responses"={
+ *                      "200" = {
+ *                          "description" = "Retourne un boolean",
+ *                          "schema" =  {"properties" = {"deleted": {"type": "boolean"}}}
+ *                      },
+ *                  },
+ *             },
  *         },
  *     },
- *     itemOperations={"get"},
- * )
- * @ApiFilter(
- *     SearchFilter::class, properties={"email", "pseudo", "vote", "place"}
+ *     itemOperations={
+ *         "get"={
+ *             "swagger_context"={
+ *                 "summary": "Récupérer une voix",
+ *                 "description": "
+ *    Filtre par Id",
+ *             },
+ *         }
+ *     }
  * )
  */
 class Voice
 {
+    public const API_COUNT_VOICE = [
+        'count' => ['type' => 'integer'],
+        'rows' => [
+            'type' => 'array',
+            'items' => [
+                'properties' => Voice::API_VOICE
+
+            ]
+
+        ]
+    ];
+
+    public const API_VOICE = [
+        'id' => ['type' => 'integer'],
+        'pseudo' => ['type' => 'string'],
+        'email' => ['type' => 'string'],
+        'updateAt' => [
+            'type' => 'string',
+            'format' => 'date-time'
+        ],
+        'createdAt' => [
+            'type' => 'string',
+            'format' => 'date-time'
+        ]
+    ];
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

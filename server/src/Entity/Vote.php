@@ -20,36 +20,195 @@ use App\Controller\Vote\DelVoteController;
  * @ORM\Entity(repositoryClass="App\Repository\VoteRepository")
  * @ApiResource(
  *     collectionOperations={
- *         "get",
- *         "post",
+ *         "get"={
+ *             "swagger_context"={
+ *                 "summary": "Récupérer une collection de votes",
+ *                 "description": "
+ *    Filtre par url ou utilisateur",
+ *                 "parameters"={
+ *                      {"name"="url", "in"="query", "type"="string", "required"=false},
+ *                      {"name"="user", "in"="query", "type"="string", "required"=false},
+ *                  },
+ *                 "responses"={
+ *                      "201" = {
+ *                          "description" = "retourne les votes",
+ *                          "schema" =  {
+ *                              "type" = "array",
+ *                              "items" = {
+ *                                  "properties" = Vote::API_VOTE_CREATED,
+ *                              },
+ *                          },
+ *                      },
+ *                  },
+ *             },
+ *         },
+ *         "post"={
+ *             "swagger_context"={
+ *                 "summary": "Créer un vote",
+ *                 "description": "
+ *    Un jeton d'authentification JWT est requis",
+ *                 "parameters"={
+ *                      {
+ *                          "name"="vote",
+ *                          "in"="body",
+ *                          "required"=true,
+ *                          "description"="L'utilisateur connecté sera automatiquement ajouté au vote grâce au token",
+ *                          "schema" =  {"properties" = Vote::API_CREATE_VOTE},
+ *                      },
+ *                  },
+ *                 "responses"={
+ *                      "201" = {
+ *                          "description" = "retourne le vote",
+ *                          "schema" =  {
+ *                              "type" = "array",
+ *                              "items" = {
+ *                                  "properties" = Vote::API_VOTE_CREATED,
+ *                              },
+ *                          },
+ *                      },
+ *                  },
+ *              },
+ *         },
  *         "get_places"={
  *             "method"="GET",
  *             "path"="/votes/places",
  *             "controller"=GetPlacesVoteController::class,
+ *             "swagger_context"={
+ *                 "summary"="Récupérer une collection de restaurants",
+ *                 "description"="
+ *    Permet de récupérer la liste des restaurants pour un vote, grâce à son url",
+ *                 "parameters"={
+ *                      {"name"="vote_url", "in"="query", "type"="string", "required"=true, "description"="Exemple d'url : Ut5Gp"},
+ *                  },
+ *                 "responses"={
+ *                      "200" = {
+ *                          "description" = "Retourne un tableau contenant tout les restaurants d'un vote",
+ *                          "schema" =  {
+ *                              "type" = "array",
+ *                              "items" = {
+ *                                  "properties" = Place::API_PLACE,
+ *                              },
+ *                          },
+ *                      },
+ *                  },
+ *             },
  *         },
  *         "get_myvotes"={
  *             "method"="GET",
  *             "path"="/votes/mines",
  *             "controller"=GetMyVoteController::class,
+ *             "swagger_context"={
+ *                 "summary": "Récupérer une collection de votes",
+ *                 "description": "
+ *    Permet de récupérer la liste de tout les votes de l'utilisateur connecté",
+ *                 "parameters"={
+ *                      {"name"="pseudo", "in"="query", "type"="string", "required"=true},
+ *                  },
+ *                 "responses"={
+ *                      "200" = {
+ *                          "description" = "Retourne l'ensemble des votes d'un utilisateur",
+ *                          "schema" =  {
+ *                              "type" = "array",
+ *                              "items" = {
+ *                                  "properties" = Vote::API_VOTE,
+ *                              },
+ *                          },
+ *                      },
+ *                  },
+ *             },
  *         },
  *         "delete"={
  *             "method"="DELETE",
  *             "path"="/votes/delete",
  *             "controller"=DelVoteController::class,
+ *             "swagger_context"={
+ *                 "summary": "Supprimer un vote",
+ *                 "description": "
+ *    Un jeton d'authentification JWT est requis",
+ *                 "parameters"={
+ *                     {"name"="vote_url", "in"="query", "type"="string", "required"=true},
+ *                  },
+ *                 "responses"={
+ *                     "204" = {
+ *                         "description" = "Renvoie un boolean",
+ *                         "schema" =  {"properties" = {"deleted": {"type": "boolean"}}},
+ *                     },
+ *                 },
+ *             },
  *         },
  *
  *     },
  *     itemOperations={
- *         "get",
+ *         "get"={
+ *             "swagger_context"={
+ *                 "summary": "Récupérer un vote",
+ *                 "description": "
+ *    Filtre par Id",
+ *             },
+ *         },
  *         "delete_place"={
  *             "method"="PUT",
  *             "path"="/votes/{id}/del_place",
  *             "controller"=DelPlaceVoteController::class,
+ *             "swagger_context"={
+ *                 "summary": "Retirer un restaurant à un vote",
+ *                 "description": "
+ *   Permet de retirer un restaurant à la liste des restaurants disponible pour un vote
+ *   Si c'est le dernier restaurant du vote, le vote passe en état inactif
+ *   Un jeton d'authentification JWT est requis",
+ *                 "parameters"={
+ *                      {
+ *                          "name"="vote",
+ *                          "in"="body",
+ *                          "required"=true,
+ *                          "description"="Supprime un restaurant à la collection",
+ *                          "schema" =  {
+ *                              "properties" = {
+ *                                  "place_id": {"type": "integer"},
+ *                                  "vote_id": {"type": "integer"}
+ *                              },
+ *                          },
+ *                      },
+ *                  },
+ *                  "responses"={
+ *                      "200" = {
+ *                          "description" = "Retourne un boolean et le restaurant",
+ *                          "schema" =  {"properties" = Vote::API_DEL_PLACE},
+ *                      },
+ *                  },
+ *             },
  *         },
  *         "add_place"={
  *             "method"="PUT",
  *             "path"="/votes/{id}/add_place",
  *             "controller"=AddPlaceVoteController::class,
+ *             "swagger_context"={
+ *                 "summary": "Ajouter un restaurant à un vote",
+ *                 "description": "
+ *    Permet d'ajouter un restaurant à la liste des restaurants disponible pour un vote
+ *    Si c'est le premier restaurant du vote, le vote passe en état actif
+ *    Un jeton d'authentification JWT est requis",
+ *                 "parameters"={
+ *                      {
+ *                          "name"="vote",
+ *                          "in"="body",
+ *                          "required"=true,
+ *                          "description"="Ajoute un restaurant à la collection",
+ *                          "schema" =  {
+ *                              "properties" = {
+ *                                  "place_id": {"type": "integer"},
+ *                                  "vote_id": {"type": "integer"}
+ *                              },
+ *                          },
+ *                      },
+ *                  },
+ *                 "responses"={
+ *                      "200" = {
+ *                          "description" = "Retourne un boolean et le restaurant",
+ *                          "schema" =  {"properties" = Vote::API_ADD_PLACE},
+ *                      },
+ *                  },
+ *             },
  *         },
  *     },
  * )
@@ -59,6 +218,112 @@ use App\Controller\Vote\DelVoteController;
  */
 class Vote
 {
+    public const API_VOTE = [
+        'id' => ['type' => 'integer'],
+        'userId' => ['type' => 'integer'],
+        'title' => ['type' => 'string'],
+        'date' => [
+            'type' => 'string',
+            'format' => 'date-time'
+        ],
+        'end_date' => [
+            'type' => 'string',
+            'format' => 'date-time'
+        ],
+        'url' => ['type' => 'string'],
+        'updatedAt' => [
+            'type' => 'string',
+            'format' => 'date-time'
+        ],
+        'createdAt' => [
+            'type' => 'string',
+            'format' => 'date-time'
+        ],
+        'active' => ['type' => 'boolean'],
+        'votes' => [
+            'type' => 'array',
+            'items' => [
+                'properties' => [
+                    'pseudo' => ['type' => 'string'],
+                    'email' => ['type' => 'string'],
+                ],
+            ],
+        ],
+    ];
+
+    public const API_CREATE_VOTE = [
+        'date' => [
+            'type' => 'string',
+            'format' => 'date-time'
+        ],
+        'end_date' => [
+            'type' => 'string',
+            'format' => 'date-time'
+        ],
+        'title' => ['type' => 'string'],
+    ];
+
+    public const API_VOTE_CREATED = [
+        'id' => ['type' => 'integer'],
+        'title' => ['type' => 'string'],
+        'date' => [
+            'type' => 'string',
+            'format' => 'date-time'
+        ],
+        'end_date' => [
+            'type' => 'string',
+            'format' => 'date-time'
+        ],
+        'url' => ['type' => 'string'],
+        'active' => ['type' => 'boolean'],
+        'createdAt' => [
+            'type' => 'string',
+            'format' => 'date-time'
+        ],
+        'updatedAt' => [
+            'type' => 'string',
+            'format' => 'date-time'
+        ],
+        'voices' => [
+            'type' => 'array',
+            'items' => [
+                'type' => 'string'
+            ],
+        ],
+        'places' => [
+            'type' => 'array',
+            'items' => [
+                'type' => 'string'
+            ],
+        ],
+        'pseudo' => ['type' => 'string'],
+        'email' => ['type' => 'string'],
+    ];
+
+    public const API_ADD_PLACE = [
+        'added' => ['type' => 'boolean'],
+        'place' => [
+            'type' => 'array',
+            'items' => [
+                'properties' => Place::API_PLACE
+
+            ]
+
+        ]
+    ];
+
+    public const API_DEL_PLACE = [
+        'deleted' => ['type' => 'boolean'],
+        'place' => [
+            'type' => 'array',
+            'items' => [
+                'properties' => Place::API_PLACE
+
+            ]
+
+        ]
+    ];
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -120,7 +385,7 @@ class Vote
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Voice", mappedBy="vote", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Voice", mappedBy="vote", cascade={"persist"})
      */
     private $voices;
 

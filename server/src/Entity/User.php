@@ -12,10 +12,106 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ApiResource(
- *     itemOperations={"get"},
+ *     itemOperations={
+ *         "get"={
+ *             "swagger_context"={
+ *                 "summary": "Récupérer un utilisateur",
+ *                 "description": "
+ *    Filtre par Id",
+ *             },
+ *         }
+ *     },
+ *     collectionOperations={
+ *         "get"={
+ *             "swagger_context"={
+ *                 "summary": "Récupérer une collection d'utilisateurs",
+ *                 "description": "
+ *    Filtre par email ou pseudo",
+ *             },
+ *         },
+ *         "login_check"={
+ *             "method"="POST",
+ *             "path"="/login_check",
+ *             "swagger_context"={
+ *                 "summary": "Récupérer un token",
+ *                 "description": "
+ *   Permet d'obtenir un token JWT qui expire tout les jours à 00h",
+ *                 "parameters"={
+ *                      {
+ *                          "name"="vote",
+ *                          "in"="body",
+ *                          "required"=true,
+ *                          "description"="",
+ *                          "schema" =  {
+ *                              "properties" = {
+ *                                  "password": {"type": "string"},
+ *                                  "username": {"type": "string"}
+ *                              },
+ *                          },
+ *                      },
+ *                  },
+ *                  "responses"={
+ *                      "200" = {
+ *                          "description" = "Retourne le token JWT",
+ *                          "schema" =  {"properties": {"token": {"type": "string"}}},
+ *                      },
+ *                  },
+ *             },
+ *         },
+ *         "post"={
+ *             "swagger_context"={
+ *                 "summary": "Créer un utilisateur",
+ *                 "description": "",
+ *                 "parameters"={
+ *                      {
+ *                          "name"="user",
+ *                          "in"="body",
+ *                          "required"=true,
+ *                          "description"="",
+ *                          "schema" =  {
+ *                              "properties" = {
+ *                                  "email": {"type": "string"},
+ *                                  "password": {"type": "string"},
+ *                                  "password_repeat": {"type": "string"},
+ *                                  "pseudo": {"type": "string"},
+ *                              },
+ *                          },
+ *                      },
+ *                  },
+ *                 "responses"={
+ *                      "201" = {
+ *                          "description" = "",
+ *                          "schema" =  {
+ *                              "properties" = {
+ *                                  "exist": {
+ *                                      "type": "array",
+ *                                      "items": {"properties": {"exist": {"type": "boolean"}}},
+ *                                  },
+ *                                  "created": {"type": "boolean"},
+ *                                  "id": {"type": "integer"},
+ *                                  "email": {"type": "string"},
+ *                                  "username": {"type": "string"},
+ *                                  "roles": {
+ *                                      "type": "array",
+ *                                      "items": {"type": "string"},
+ *                                  },
+ *                                  "password": {"type": "string"},
+ *                                  "pseudo": {"type": "string"},
+ *                                  "votes": {
+ *                                      "type": "array",
+ *                                      "items": {"type": "string"},
+ *                                  },
+ *                              },
+ *                          },
+ *                      },
+ *                  },
+ *             },
+ *         },
+ *     },
  * )
  * @UniqueEntity("email", message="Cet email est déjà utilisé par un autre utilisateur")
  * @UniqueEntity("pseudo", message="Ce pseudo est déjà utilisé par un autre utilisateur")
