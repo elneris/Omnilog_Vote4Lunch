@@ -1,0 +1,2 @@
+web: cd ..
+web: docker-compose up -d
