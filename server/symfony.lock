@@ -438,6 +438,21 @@
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
     },
+    "symfony/mercure": {
+        "version": "v0.2.0"
+    },
+    "symfony/mercure-bundle": {
+        "version": "0.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "0.1",
+            "ref": "b65571fe6fac82e00e212a525bc138896b78b81d"
+        },
+        "files": [
+            "config/packages/mercure.yaml"
+        ]
+    },
     "symfony/mime": {
         "version": "v4.3.4"
     },
